@@ -14,6 +14,7 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(useGSAP, ScrollTrigger);
 }
 
+<<<<<<< HEAD
 // Dynamically import the entire 3D component (Canvas + Scene)
 // This ensures that the loading div is rendered OUTSIDE of the R3F context.
 const HeroCanvas = dynamic(() => import("@/components/3d/HeroCanvas"), {
@@ -29,6 +30,21 @@ const HeroCanvas = dynamic(() => import("@/components/3d/HeroCanvas"), {
     </div>
   ),
 });
+=======
+// Dynamically import the heavy R3F Canvas to not block initial paint
+const HeroScene = dynamic(() => import("@/components/3d/HeroScene"), {
+  ssr: false,
+  loading: () => (
+    <div className="absolute inset-0 flex items-center justify-center text-white/20">
+      Loading 3D Experience...
+    </div>
+  ),
+});
+const Canvas = dynamic(
+  () => import("@react-three/fiber").then((mod) => mod.Canvas),
+  { ssr: false },
+);
+>>>>>>> ffa99862091da5302c3b7b1a28692c16f366efb5
 
 export default function Home() {
   const containerRef = useRef();
@@ -72,7 +88,13 @@ export default function Home() {
       <section className="relative h-[100svh] w-full flex items-center justify-center overflow-hidden">
         {/* Background 3D Canvas */}
         <div className="absolute inset-0 z-0 pointer-events-auto">
+<<<<<<< HEAD
           <HeroCanvas />
+=======
+          <Canvas shadows camera={{ position: [0, 0, 8], fov: 45 }}>
+            <HeroScene />
+          </Canvas>
+>>>>>>> ffa99862091da5302c3b7b1a28692c16f366efb5
         </div>
 
         {/* Foreground Content */}

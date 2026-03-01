@@ -9,7 +9,11 @@
   --color-brand-white: #fcfcfc;
 
   /* Fonts */
+<<<<<<< HEAD
   --font-sans: var(--font-outfit);
+=======
+  --font-sans: var(--font-inter);
+>>>>>>> ffa99862091da5302c3b7b1a28692c16f366efb5
 }
 
 @layer base {
