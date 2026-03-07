@@ -105,7 +105,7 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
-              Power for the long haul.
+              Designed for the long haul.
             </h2>
             <p className="text-xl text-gray-400">
               The proprietary dual-vacuum insulation paired with smart thermal

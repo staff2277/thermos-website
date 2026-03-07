@@ -2,10 +2,6 @@
   "files.associations": {
     "*.js": "javascriptreact",
     "*.jsx": "javascriptreact"
-<<<<<<< HEAD
   },
   "eslint.enable": false
-=======
-  }
->>>>>>> 78eb954890832386e189f2961ff1e59ed9a5e7f6
 }
