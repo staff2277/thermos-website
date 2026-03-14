@@ -8,6 +8,7 @@ import {
   PerspectiveCamera,
   ContactShadows,
   OrbitControls,
+  Environment,
 } from "@react-three/drei";
 import { EffectComposer, DepthOfField } from "@react-three/postprocessing";
 import { Bottle } from "../3d/Bottle";
@@ -31,6 +32,9 @@ function HeroScene() {
         near={0.1}
         far={100}
       />
+
+      {/* Environment HDRI for lighting only */}
+      <Environment files="/hdri/pretoria_gardens_1k.hdr" background={false} />
 
       {/* Lighting Setup */}
       {/* Key Light */}
