@@ -13,13 +13,6 @@ export function Bottle({ isHero = false, ...props }) {
   
   const ref = useRef();
 
-  // Subtle rotation for the hero bottle
-  useFrame(() => {
-    if (isHero && ref.current) {
-      ref.current.rotation.y += 0.002;
-    }
-  });
-
   // Ensure meshes cast/receive shadows
   copiedScene.traverse((child) => {
     if (child.isMesh) {
