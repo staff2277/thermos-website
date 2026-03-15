@@ -55,7 +55,7 @@ function HeroScene() {
       {/* Main Hero Bottle */}
       <Bottle
         position={[0, 0.6, 0]}
-        rotation={[0, 30 * (Math.PI / 180), 0]}
+        rotation={[0, 80 * (Math.PI / 180), 0]}
         isHero
       />
 
@@ -72,23 +72,23 @@ function HeroScene() {
       {/* Background Bottles */}
       <Bottle
         position={[-3, 0.5, -5]}
-        rotation={[0, 30 * (Math.PI / 180), 0]}
+        rotation={[0, 80 * (Math.PI / 180), 0]}
         scale={0.8}
       />
       <Bottle
         position={[3, 0.5, -6]}
-        rotation={[0, 30 * (Math.PI / 180), 0]}
+        rotation={[0, 80 * (Math.PI / 180), 0]}
         scale={0.7}
       />
       <Bottle
         position={[0, 0.5, -7]}
-        rotation={[0, 30 * (Math.PI / 180), 0]}
+        rotation={[0, 80 * (Math.PI / 180), 0]}
         scale={0.85}
       />
 
       {/* Environment / Ground Plane */}
       <mesh
-        rotation={[-Math.PI / 2, 0, 30 * (Math.PI / 180)]}
+        rotation={[-Math.PI / 2, 0, 80 * (Math.PI / 180)]}
         position={[0, 0, 0]}
         receiveShadow
       >
