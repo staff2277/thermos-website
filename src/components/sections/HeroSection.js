@@ -10,6 +10,7 @@ import {
   OrbitControls,
   Environment,
 } from "@react-three/drei";
+import { EffectComposer, DepthOfField } from "@react-three/postprocessing";
 import { Bottle } from "../3d/Bottle";
 
 function HeroScene() {
@@ -53,11 +54,7 @@ function HeroScene() {
       <ambientLight intensity={0.4} />
 
       {/* Main Hero Bottle */}
-      <Bottle
-        position={[0, 0.6, 0]}
-        rotation={[0, 80 * (Math.PI / 180), 0]}
-        isHero
-      />
+      <Bottle position={[0, 0.6, 0]} isHero />
 
       {/* Contact Shadows for grounding */}
       <ContactShadows
@@ -70,28 +67,12 @@ function HeroScene() {
       />
 
       {/* Background Bottles */}
-      <Bottle
-        position={[-3, 0.5, -5]}
-        rotation={[0, 80 * (Math.PI / 180), 0]}
-        scale={0.8}
-      />
-      <Bottle
-        position={[3, 0.5, -6]}
-        rotation={[0, 80 * (Math.PI / 180), 0]}
-        scale={0.7}
-      />
-      <Bottle
-        position={[0, 0.5, -7]}
-        rotation={[0, 80 * (Math.PI / 180), 0]}
-        scale={0.85}
-      />
+      <Bottle position={[-3, 0.5, -5]} scale={0.8} />
+      <Bottle position={[3, 0.5, -6]} scale={0.7} />
+      <Bottle position={[0, 0.5, -7]} scale={0.85} />
 
       {/* Environment / Ground Plane */}
-      <mesh
-        rotation={[-Math.PI / 2, 0, 80 * (Math.PI / 180)]}
-        position={[0, 0, 0]}
-        receiveShadow
-      >
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[50, 50]} />
         <meshStandardMaterial color="#d4d4d4" roughness={0.8} metalness={0.1} />
       </mesh>
@@ -110,6 +91,7 @@ export default function HeroSection() {
           </Suspense>
         </Canvas>
       </div>
+
     </section>
   );
 }
