@@ -27,7 +27,7 @@ function HeroScene() {
       <PerspectiveCamera
         makeDefault
         ref={cameraRef}
-        position={[0, 1.2, 4]}
+        position={[0, 2.2, 4]}
         fov={35}
         near={0.1}
         far={100}
