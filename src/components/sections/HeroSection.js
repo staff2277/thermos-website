@@ -27,14 +27,14 @@ function HeroScene() {
       <PerspectiveCamera
         makeDefault
         ref={cameraRef}
-        position={[0, 2.3, 4]}
+        position={[0, 2.5, 2.3]}
         fov={35}
         near={0.1}
         far={100}
       />
 
-      {/* Environment HDRI for lighting only */}
-      <Environment files="/hdri/pretoria_gardens_1k.hdr" background={false} />
+      {/* Environment HDRI for lighting only - Intensity reduced by 30% */}
+      <Environment files="/hdri/pretoria_gardens_1k.hdr" background={false} environmentIntensity={0.7} />
 
       {/* Lighting Setup */}
       {/* Key Light */}
@@ -54,29 +54,11 @@ function HeroScene() {
       <ambientLight intensity={0.4} />
 
       {/* Main Hero Bottle */}
-      <Bottle position={[0, 0.6, 0]} isHero />
+      <Bottle position={[0, 0.6, 1.5]} isHero />
 
-      {/* Contact Shadows for grounding */}
-      <ContactShadows
-        position={[0, 0, 0]}
-        opacity={0.6}
-        scale={5}
-        blur={2.5}
-        far={2}
-        color="#000000"
-      />
+      {/* Main Hero Scene (Full model with reflective plane) */}
+      <Bottle position={[0, 0, 0]} isHero />
 
-      {/* Background Bottles */}
-      <Bottle position={[-3, 0.5, -5]} scale={0.8} />
-      <Bottle position={[3, 0.5, -6]} scale={0.7} />
-      <Bottle position={[0, 0.5, -7]} scale={0.85} />
-
-      {/* Environment / Ground Plane */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
-        <planeGeometry args={[50, 50]} />
-        <meshStandardMaterial color="#d4d4d4" roughness={0.8} metalness={0.1} />
-      </mesh>
-    </>
   );
 }
 
