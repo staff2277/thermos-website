@@ -11,14 +11,14 @@ import {
   Environment,
 } from "@react-three/drei";
 import { EffectComposer, DepthOfField } from "@react-three/postprocessing";
-import { Bottle } from "../3d/Bottle";
+import { ModelScene } from "../3d/ModelScene";
 
 function HeroScene() {
   const cameraRef = useRef();
 
   return (
     <>
-      <color attach="background" args={["green"]} />
+      <color attach="background" args={["black"]} />
 
       <OrbitControls target={[0, 0.8, 0]} />
       <axesHelper args={[5]} />
@@ -27,14 +27,14 @@ function HeroScene() {
       <PerspectiveCamera
         makeDefault
         ref={cameraRef}
-        position={[0, 2.5, 2.3]}
+        position={[0, 2, 2.6]}
         fov={35}
         near={0.1}
         far={100}
       />
 
-      {/* Environment HDRI for lighting only - Intensity reduced by 30% */}
-      <Environment files="/hdri/pretoria_gardens_1k.hdr" background={false} environmentIntensity={0.7} />
+      {/* Environment HDRI for lighting only */}
+      <Environment files="/hdri/pretoria_gardens_1k.hdr" background={false} />
 
       {/* Lighting Setup */}
       {/* Key Light */}
@@ -54,11 +54,18 @@ function HeroScene() {
       <ambientLight intensity={0.4} />
 
       {/* Main Hero Bottle */}
-      <Bottle position={[0, 0.6, 1.5]} isHero />
+      <ModelScene position={[0, 0.6, 1.8]} isHero />
 
-      {/* Main Hero Scene (Full model with reflective plane) */}
-      <Bottle position={[0, 0, 0]} isHero />
-
+      {/* Contact Shadows for grounding */}
+      <ContactShadows
+        position={[0, 0, 0]}
+        opacity={0.6}
+        scale={5}
+        blur={2.5}
+        far={2}
+        color="#000000"
+      />
+    </>
   );
 }
 
