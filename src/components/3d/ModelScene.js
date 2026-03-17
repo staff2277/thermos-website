@@ -1,6 +1,6 @@
 "use client";
 
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, MeshReflectorMaterial } from "@react-three/drei";
 
 function BottleMesh({ name, position, rotation, scale, nodes, materials }) {
   return (
@@ -10,21 +10,21 @@ function BottleMesh({ name, position, rotation, scale, nodes, materials }) {
         castShadow
         receiveShadow
         geometry={nodes.Cylinder008.geometry}
-        material={materials['Material.004']}
+        material={materials["Material.004"]}
       />
       <mesh
         name="Cylinder008_1"
         castShadow
         receiveShadow
         geometry={nodes.Cylinder008_1.geometry}
-        material={materials['Material.001']}
+        material={materials["Material.001"]}
       />
       <mesh
         name="Cylinder008_2"
         castShadow
         receiveShadow
         geometry={nodes.Cylinder008_2.geometry}
-        material={materials['Material.003']}
+        material={materials["Material.003"]}
       />
       <mesh
         name="Cylinder008_3"
@@ -52,13 +52,23 @@ export function ModelScene({ isHero = false, ...props }) {
         />
         <mesh
           name="Plane"
-          castShadow
           receiveShadow
           geometry={nodes.Plane.geometry}
-          material={materials['Material.002']}
-          material-roughness={0}
           scale={9}
-        />
+        >
+          <MeshReflectorMaterial
+            blur={[300, 100]}
+            resolution={1024}
+            mixBlur={1}
+            mixStrength={60}
+            roughness={0.2}
+            depthScale={1.2}
+            minDepthThreshold={0.4}
+            maxDepthThreshold={1.4}
+            color="#151515"
+            metalness={0.5}
+          />
+        </mesh>
         <BottleMesh
           name="Bottle001"
           position={[-1.16934204, 0.19698095, -1.35965967]}
