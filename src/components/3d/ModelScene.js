@@ -56,6 +56,7 @@ export function ModelScene({ isHero = false, ...props }) {
           receiveShadow
           geometry={nodes.Plane.geometry}
           material={materials['Material.002']}
+          material-roughness={0}
           scale={9}
         />
         <BottleMesh

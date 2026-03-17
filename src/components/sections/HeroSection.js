@@ -34,24 +34,25 @@ function HeroScene() {
       />
 
       {/* Environment HDRI for lighting only */}
-      <Environment files="/hdri/pretoria_gardens_1k.hdr" background={false} />
+      <Environment
+        files="/hdri/pretoria_gardens_1k.hdr"
+        background={false}
+        environmentIntensity={0.1}
+      />
 
       {/* Lighting Setup */}
       {/* Key Light */}
       <directionalLight
         position={[4, 5, 3]}
-        intensity={2}
+        intensity={1}
         castShadow
         shadow-mapSize={[1024, 1024]}
         shadow-bias={-0.0005}
       />
       {/* Fill Light */}
-      <pointLight position={[-3, 2, 2]} intensity={0.6} />
+      <pointLight position={[3, 2, 3]} intensity={70} />
       {/* Rim Light */}
-      <pointLight position={[0, 4, -4]} intensity={1.2} />
-
-      {/* Soft environmental lighting */}
-      <ambientLight intensity={0.4} />
+      <pointLight position={[0, 4, -4]} intensity={50} />
 
       {/* Main Hero Bottle */}
       <ModelScene position={[0, 0.6, 1.8]} isHero />

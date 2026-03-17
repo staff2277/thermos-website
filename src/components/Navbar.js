@@ -13,7 +13,7 @@ export default function Navbar() {
 
   return (
     <nav className="absolute top-0 left-0 right-0 z-50 transition-all duration-300 ">
-      <div className="max-w-7xl px-10 mx-auto py-1 rounded-4xl border-[0.1px] border-white dark:border-white flex items-center justify-between py-4 backdrop-blur-md">
+      <div className="max-w-7xl px-10 mx-auto py-1 rounded-4xl flex items-center justify-between py-4 backdrop-blur-md">
         {/* Logo */}
         <Link href="/" className="text-outfit-20 tracking-tighter">
           THERMOS
