@@ -1,6 +1,6 @@
 "use client";
 
-import { useGLTF, MeshReflectorMaterial } from "@react-three/drei";
+import { useGLTF, Reflector } from "@react-three/drei";
 
 function BottleMesh({ name, position, rotation, scale, nodes, materials }) {
   return (
@@ -40,6 +40,8 @@ function BottleMesh({ name, position, rotation, scale, nodes, materials }) {
 export function ModelScene({ isHero = false, ...props }) {
   const { nodes, materials } = useGLTF("/models/thermos2.glb");
 
+  const floorMaterial = materials["Material.002"];
+
   return (
     <group {...props} dispose={null}>
       <group name="Scene">
@@ -50,25 +52,32 @@ export function ModelScene({ isHero = false, ...props }) {
           nodes={nodes}
           materials={materials}
         />
-        <mesh
-          name="Plane"
-          receiveShadow
-          geometry={nodes.Plane.geometry}
+
+        {/* ✅ REFLECTIVE FLOOR WITH ORIGINAL MATERIAL */}
+        <Reflector
+          resolution={1024}
+          mirror={1}
+          mixBlur={0.6}
+          mixStrength={1}
+          roughness={0}
+          rotation={[-Math.PI / 2, 0, 0]}
+          position={[0, 0, 0]}
           scale={9}
         >
-          <MeshReflectorMaterial
-            blur={[300, 100]}
-            resolution={1024}
-            mixBlur={1}
-            mixStrength={60}
-            roughness={0.2}
-            depthScale={1.2}
-            minDepthThreshold={0.4}
-            maxDepthThreshold={1.4}
-            color="#151515"
-            metalness={0.5}
-          />
-        </mesh>
+          {(Material, props) => (
+            <Material
+              {...props}
+              map={floorMaterial.map}
+              normalMap={floorMaterial.normalMap}
+              roughnessMap={floorMaterial.roughnessMap}
+              metalnessMap={floorMaterial.metalnessMap}
+              color={floorMaterial.color}
+              metalness={1}
+              roughness={0}
+            />
+          )}
+        </Reflector>
+
         <BottleMesh
           name="Bottle001"
           position={[-1.16934204, 0.19698095, -1.35965967]}

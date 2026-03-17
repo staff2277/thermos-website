@@ -20,7 +20,7 @@ function HeroScene() {
     <>
       <color attach="background" args={["black"]} />
 
-      <OrbitControls target={[0, 0.5, 0]} />
+      <OrbitControls target={[0, 0.8, 0]} />
       <axesHelper args={[5]} />
 
       {/* Camera */}
@@ -37,21 +37,17 @@ function HeroScene() {
       <Environment
         files="/hdri/pretoria_gardens_1k.hdr"
         background={false}
-        environmentIntensity={0.6}
+        environmentIntensity={0.7}
       />
 
       {/* Lighting Setup */}
       {/* Key Light */}
       <directionalLight
         position={[4, 5, 3]}
-        intensity={1.5}
+        intensity={1}
         castShadow
         shadow-mapSize={[1024, 1024]}
         shadow-bias={-0.0005}
-        shadow-camera-left={-10}
-        shadow-camera-right={10}
-        shadow-camera-top={10}
-        shadow-camera-bottom={-10}
       />
 
       {/* Fill Light */}
@@ -60,11 +56,11 @@ function HeroScene() {
       <pointLight position={[0, 4, -4]} intensity={50} />
 
       {/* Main Hero Bottle */}
-      <ModelScene position={[0, 0, 0]} isHero />
+      <ModelScene position={[0, 0.6, 1.8]} isHero />
 
       {/* Contact Shadows for grounding */}
       <ContactShadows
-        position={[0, 0.01, 0]}
+        position={[0, 0, 0]}
         opacity={0.6}
         scale={5}
         blur={1}
