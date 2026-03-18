@@ -13,9 +13,12 @@ export default function Navbar() {
 
   return (
     <nav className="absolute top-0 left-0 right-0 z-50 transition-all duration-300">
-      <div className="max-w-7xl px-10 mx-auto py-2 flex items-center justify-between py-6">
+      <div className="max-w-7xl px-10 mx-auto py-2 flex items-center justify-between py-6 backdrop-blur-2xl">
         {/* Logo */}
-        <Link href="/" className="text-outfit-24 font-bold tracking-tighter text-white">
+        <Link
+          href="/"
+          className="text-outfit-24 font-bold tracking-tighter text-white"
+        >
           THERMOS<span className="text-accent">.</span>
         </Link>
 
@@ -41,7 +44,9 @@ export default function Navbar() {
             <ProfileIcon color="currentColor" size={24} />
           </Link>
           <Link href="/sign-in" className="group">
-            <span className="text-outfit-14 font-semibold text-white group-hover:text-accent transition-colors">Sign In</span>
+            <span className="text-outfit-14 font-semibold text-white group-hover:text-accent transition-colors">
+              Sign In
+            </span>
           </Link>
           <div className="w-[1px] h-4 bg-white/20" />
           <button className="text-white hover:text-accent transition-all duration-300 hover:scale-110 cursor-pointer relative">
