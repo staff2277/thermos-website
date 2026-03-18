@@ -1,9 +1,9 @@
-import HeroSection from "@/components/sections/HeroSection";
+import SceneContainer from "@/components/sections/SceneContainer";
 
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <HeroSection />
+      <SceneContainer />
       {/* 
         <FeaturesSection />
         <ProductShowcaseSection />
