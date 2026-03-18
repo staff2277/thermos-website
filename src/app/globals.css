@@ -3,6 +3,12 @@
 @theme {
   --font-sans: var(--font-outfit), sans-serif;
   --font-outfit: var(--font-outfit);
+
+  /* Custom Color Palette */
+  --color-primary: #31482F;    /* Deep Forest Green */
+  --color-accent: #298121;     /* New Forest Green Accent */
+  --color-sand: #BBA081;       /* Warm Earthy Beige */
+  --color-cream: #D6CABB;      /* Soft Light Sand */
 }
 
 @layer utilities {
@@ -40,13 +46,13 @@
 
 body {
   background-color: #ffffff;
-  color: #000000;
+  color: var(--color-primary);
   -webkit-font-smoothing: antialiased;
 }
 
 @media (prefers-color-scheme: dark) {
   body {
-    background-color: #000000;
+    background-color: var(--color-primary);
     color: #ffffff;
   }
 }

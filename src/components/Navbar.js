@@ -12,20 +12,20 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="absolute top-0 left-0 right-0 z-50 transition-all duration-300 ">
-      <div className="max-w-7xl px-10 mx-auto py-1 rounded-4xl flex items-center justify-between py-4 backdrop-blur-md">
+    <nav className="absolute top-0 left-0 right-0 z-50 transition-all duration-300">
+      <div className="max-w-7xl px-10 mx-auto py-2 flex items-center justify-between py-6">
         {/* Logo */}
-        <Link href="/" className="text-outfit-20 tracking-tighter">
-          THERMOS
+        <Link href="/" className="text-outfit-24 font-bold tracking-tighter text-white">
+          THERMOS<span className="text-accent">.</span>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-10">
           {routes.slice(1).map((route) => (
             <Link
               key={route.path}
               href={route.path}
-              className="text-outfit-14 text-gray-600 hover:text-black dark:text-gray-300 dark:hover:text-white transition-colors"
+              className="text-outfit-14 text-white/70 hover:text-accent transition-all duration-300 font-medium"
             >
               {route.name}
             </Link>
@@ -33,19 +33,22 @@ export default function Navbar() {
         </div>
 
         {/* Action Button */}
-        <div className="flex items-center gap-4 py">
+        <div className="flex items-center gap-6">
           <Link
             href="/profile"
-            className="text-sm font-medium hover:opacity-80 transition-opacity"
+            className="text-white hover:text-accent transition-colors"
           >
-            <ProfileIcon color="white" size={30} />
+            <ProfileIcon color="currentColor" size={24} />
           </Link>
-          <Link href="/sign-in" className="hover:opacity-80 transition-opacity">
-            <span className="text-outfit-14">Sign In</span>
+          <Link href="/sign-in" className="group">
+            <span className="text-outfit-14 font-semibold text-white group-hover:text-accent transition-colors">Sign In</span>
           </Link>
-          <div className="w-[0.1px] h-6 bg-white/20 " />
-          <button className=" text-white dark:text-black hover:scale-105 cursor-pointer">
-            <CartIcon color="white" size={30} />
+          <div className="w-[1px] h-4 bg-white/20" />
+          <button className="text-white hover:text-accent transition-all duration-300 hover:scale-110 cursor-pointer relative">
+            <CartIcon color="currentColor" size={24} />
+            <span className="absolute -top-2 -right-2 w-4 h-4 bg-accent text-[10px] text-primary font-bold rounded-full flex items-center justify-center">
+              0
+            </span>
           </button>
         </div>
       </div>

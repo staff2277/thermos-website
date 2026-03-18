@@ -1,6 +1,6 @@
 "use client";
 
-import { useGLTF, Reflector } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 
 function BottleMesh({ name, position, rotation, scale, nodes, materials }) {
   return (
@@ -40,8 +40,6 @@ function BottleMesh({ name, position, rotation, scale, nodes, materials }) {
 export function ModelScene({ isHero = false, ...props }) {
   const { nodes, materials } = useGLTF("/models/thermos2.glb");
 
-  const floorMaterial = materials["Material.002"];
-
   return (
     <group {...props} dispose={null}>
       <group name="Scene">
@@ -52,32 +50,16 @@ export function ModelScene({ isHero = false, ...props }) {
           nodes={nodes}
           materials={materials}
         />
-
-        {/* ✅ REFLECTIVE FLOOR WITH ORIGINAL MATERIAL */}
-        <Reflector
-          resolution={1024}
-          mirror={1}
-          mixBlur={0.6}
-          mixStrength={1}
-          roughness={0}
-          rotation={[-Math.PI / 2, 0, 0]}
-          position={[0, 0, 0]}
+        <mesh
+          name="Plane"
+          castShadow
+          receiveShadow
+          geometry={nodes.Plane.geometry}
+          material={materials["Material.002"]}
+          material-roughness={0}
+          material-metalness={1}
           scale={9}
-        >
-          {(Material, props) => (
-            <Material
-              {...props}
-              map={floorMaterial.map}
-              normalMap={floorMaterial.normalMap}
-              roughnessMap={floorMaterial.roughnessMap}
-              metalnessMap={floorMaterial.metalnessMap}
-              color={floorMaterial.color}
-              metalness={1}
-              roughness={0}
-            />
-          )}
-        </Reflector>
-
+        />
         <BottleMesh
           name="Bottle001"
           position={[-1.16934204, 0.19698095, -1.35965967]}
