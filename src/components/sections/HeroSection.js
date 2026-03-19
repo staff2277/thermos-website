@@ -24,6 +24,7 @@ if (typeof window !== "undefined") {
 function HeroScene() {
   const cameraRef = useRef();
   const groupRef = useRef();
+  const dirLightRef = useRef();
 
   useGSAP(() => {
     if (!cameraRef.current) return;
@@ -45,7 +46,7 @@ function HeroScene() {
     // Hero → Battery camera animation
     gsap.to(cameraRef.current.position, {
       x: 0,
-      y: 5.5,
+      y: 3.5,
       z: 0.1,
       ease: "power1.inOut",
       immediateRender: false,
@@ -56,6 +57,34 @@ function HeroScene() {
         scrub: 1,
       },
     });
+
+    // Animate directional light to shine directly from above
+    if (dirLightRef.current) {
+      gsap.to(dirLightRef.current.position, {
+        x: 0,
+        y: 4,
+        z: 0,
+        ease: "power1.inOut",
+        immediateRender: false,
+        scrollTrigger: {
+          trigger: ".battery-section",
+          start: "top bottom",
+          end: "top 20%",
+          scrub: 1,
+        },
+      });
+      gsap.to(dirLightRef.current, {
+        intensity: 7.5,
+        ease: "power1.inOut",
+        immediateRender: false,
+        scrollTrigger: {
+          trigger: ".battery-section",
+          start: "top bottom",
+          end: "top 20%",
+          scrub: 1,
+        },
+      });
+    }
   });
 
   useFrame((state) => {
@@ -96,6 +125,7 @@ function HeroScene() {
       {/* Lighting Setup */}
       {/* Key Light */}
       <directionalLight
+        ref={dirLightRef}
         position={[4, 5, 3]}
         intensity={1.5}
         castShadow
