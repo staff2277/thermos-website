@@ -27,18 +27,34 @@ function HeroScene() {
 
   useGSAP(() => {
     if (!cameraRef.current) return;
-    
+
+    // Intro → Hero camera animation
+    gsap.to(cameraRef.current.position, {
+      x: 0,
+      y: 2,
+      z: 2.6,
+      ease: "power1.inOut",
+      scrollTrigger: {
+        trigger: ".hero-content-section",
+        start: "top bottom",
+        end: "top 20%",
+        scrub: 1,
+      },
+    });
+
+    // Hero → Battery camera animation
     gsap.to(cameraRef.current.position, {
       x: 0,
       y: 5.5,
       z: 0.1,
       ease: "power1.inOut",
+      immediateRender: false,
       scrollTrigger: {
         trigger: ".battery-section",
         start: "top bottom",
         end: "top 20%",
         scrub: 1,
-      }
+      },
     });
   });
 
@@ -66,7 +82,7 @@ function HeroScene() {
       <PerspectiveCamera
         makeDefault
         ref={cameraRef}
-        position={[0, 2, 2.6]}
+        position={[1.5, 2, 3.2]}
         fov={40}
         near={0.1}
         far={100}
@@ -115,13 +131,26 @@ export default function HeroSection() {
     () => {
       const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
-      // Entrance animation
-      tl.from(".animate-item", {
+      // Intro section entrance animation
+      gsap.from(".animate-item-intro", {
         y: 60,
         opacity: 0,
         duration: 1.2,
         stagger: 0.15,
-        delay: 0.2,
+        delay: 0.3,
+      });
+
+      // Hero section entrance animation
+      gsap.from(".animate-item", {
+        scrollTrigger: {
+          trigger: ".hero-content-section",
+          start: "top 60%",
+          toggleActions: "play none none reverse",
+        },
+        y: 60,
+        opacity: 0,
+        duration: 1.2,
+        stagger: 0.15,
       });
 
       // Continuous gradient animation moving left at clock speed
@@ -160,8 +189,27 @@ export default function HeroSection() {
       </div>
 
       <div className="relative z-10 w-full -mt-[100vh] pointer-events-none">
+        {/* Page 0: Intro Section */}
+        <div className="intro-section w-full h-screen flex items-center justify-center pointer-events-none">
+          <div className="text-center flex flex-col items-center gap-6">
+            <div className="flex items-center gap-3 animate-item-intro">
+              <span className="h-[1px] w-12 bg-accent" />
+              <span className="text-accent font-bold tracking-[0.3em] uppercase text-xs">
+                Introducing
+              </span>
+              <span className="h-[1px] w-12 bg-accent" />
+            </div>
+            <h1 className="text-7xl md:text-8xl lg:text-9xl text-white font-bold leading-[1] tracking-tight animate-item-intro">
+              Thermos
+            </h1>
+            <p className="text-white/60 text-sm tracking-[0.2em] uppercase font-outfit animate-item-intro">
+              Scroll to explore
+            </p>
+          </div>
+        </div>
+
         {/* Page 1: Hero Content Overlay */}
-        <div className="w-full h-screen flex items-center px-6 md:px-12 lg:px-24 pointer-events-none">
+        <div className="hero-content-section w-full h-screen flex items-center px-6 md:px-12 lg:px-24 pointer-events-none">
           <div className="w-full md:w-[45%] lg:w-[40%] p-8 md:p-12 rounded-[2.5rem] bg-white/10 backdrop-blur-sm border-[0.05] border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.15)] flex flex-col gap-8 pointer-events-auto transform transition-all duration-700 hover:bg-white/15">
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-3 animate-item">
