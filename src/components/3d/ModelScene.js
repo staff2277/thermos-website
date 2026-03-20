@@ -37,8 +37,8 @@ function BottleMesh({ name, position, rotation, scale, nodes, materials }) {
   );
 }
 
-export function ModelScene({ isHero = false, ...props }) {
-  const { nodes, materials } = useGLTF("/models/thermos2.glb");
+export function ModelScene({ isHero = false, batteryRef, ...props }) {
+  const { nodes, materials } = useGLTF("/models/thermos4.glb");
 
   return (
     <group {...props} dispose={null}>
@@ -91,6 +91,22 @@ export function ModelScene({ isHero = false, ...props }) {
           nodes={nodes}
           materials={materials}
         />
+        <group name="Battery" ref={batteryRef} scale={[1, 0, 1]} rotation={[Math.PI / 2, 0, 0]} visible={true}>
+          <mesh
+            name="Cube"
+            castShadow
+            receiveShadow
+            geometry={nodes.Cube.geometry}
+            material={materials["Material.006"]}
+          />
+          <mesh
+            name="Cube_1"
+            castShadow
+            receiveShadow
+            geometry={nodes.Cube_1.geometry}
+            material={materials["Material.005"]}
+          />
+        </group>
       </group>
     </group>
   );

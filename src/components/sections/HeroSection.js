@@ -25,6 +25,7 @@ function HeroScene() {
   const cameraRef = useRef();
   const groupRef = useRef();
   const dirLightRef = useRef();
+  const batteryRef = useRef();
 
   useGSAP(() => {
     if (!cameraRef.current) return;
@@ -85,6 +86,32 @@ function HeroScene() {
         },
       });
     }
+
+    // Animate Battery group scale in smoothly
+    if (batteryRef.current) {
+      gsap.to(batteryRef.current.scale, {
+        y: 0.674,
+        ease: "power2.out",
+        immediateRender: false,
+        scrollTrigger: {
+          trigger: ".battery-section",
+          start: "top 60%",
+          end: "top 20%",
+          scrub: 1,
+        },
+      });
+      gsap.to(batteryRef.current.rotation, {
+        x: 0,
+        ease: "power2.out",
+        immediateRender: false,
+        scrollTrigger: {
+          trigger: ".battery-section",
+          start: "top 60%",
+          end: "top 20%",
+          scrub: 1,
+        },
+      });
+    }
   });
 
   useFrame((state) => {
@@ -136,10 +163,11 @@ function HeroScene() {
       <pointLight position={[3, 2, 3]} intensity={50} />
       {/* Rim Light */}
       <pointLight position={[0, 4, -4]} intensity={30} />
+      <ambientLight intensity={0} />
       {/* Rotating Scene Content */}
       <group ref={groupRef}>
         {/* Main Hero Bottle - Shifted slightly right to balance with left CTA */}
-        <ModelScene position={[0.7, 0.6, 1.8]} isHero />
+        <ModelScene position={[0.7, 0.6, 1.8]} isHero batteryRef={batteryRef} />
         {/* Contact Shadows for grounding */}
         <ContactShadows
           position={[0, 0, 0]}
@@ -230,7 +258,7 @@ export default function HeroSection() {
               <span className="h-[1px] w-12 bg-accent" />
             </div>
             <h1 className="text-7xl md:text-8xl lg:text-9xl text-white font-bold leading-[1] tracking-tight animate-item-intro">
-              Thermos
+              THERMOS
             </h1>
             <p className="text-white/60 text-sm tracking-[0.2em] uppercase font-outfit animate-item-intro">
               Scroll to explore
