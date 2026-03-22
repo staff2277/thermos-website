@@ -91,7 +91,13 @@ export function ModelScene({ isHero = false, batteryRef, ...props }) {
           nodes={nodes}
           materials={materials}
         />
-        <group name="Battery" ref={batteryRef} scale={[1, 0, 1]} rotation={[Math.PI / 2, 0, 0]} visible={true}>
+        <group
+          name="Battery"
+          ref={batteryRef}
+          scale={[1, 0, 1]}
+          rotation={[Math.PI / 2, 0, 0]}
+          visible={true}
+        >
           <mesh
             name="Cube"
             castShadow
@@ -112,4 +118,4 @@ export function ModelScene({ isHero = false, batteryRef, ...props }) {
   );
 }
 
-useGLTF.preload("/models/thermos2.glb");
+useGLTF.preload("/models/thermos4.glb");

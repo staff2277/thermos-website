@@ -59,6 +59,21 @@ function HeroScene() {
       },
     });
 
+    // Battery → Temperature camera animation (Forward from top)
+    gsap.to(cameraRef.current.position, {
+      x: 1,
+      y: 3,
+      z: 2,
+      ease: "power1.inOut",
+      immediateRender: false,
+      scrollTrigger: {
+        trigger: ".temp-section",
+        start: "top bottom",
+        end: "top 20%",
+        scrub: 1,
+      },
+    });
+
     // Animate directional light to shine directly from above
     if (dirLightRef.current) {
       gsap.to(dirLightRef.current.position, {
@@ -111,6 +126,30 @@ function HeroScene() {
           scrub: 1,
         },
       });
+
+      // Animate Battery group out as we enter Temperature section
+      gsap.to(batteryRef.current.scale, {
+        y: 0,
+        ease: "power2.in",
+        immediateRender: false,
+        scrollTrigger: {
+          trigger: ".temp-section",
+          start: "top bottom",
+          end: "top 70%",
+          scrub: 1,
+        },
+      });
+      gsap.to(batteryRef.current.rotation, {
+        x: Math.PI / 2,
+        ease: "power2.in",
+        immediateRender: false,
+        scrollTrigger: {
+          trigger: ".temp-section",
+          start: "top bottom",
+          end: "top 70%",
+          scrub: 1,
+        },
+      });
     }
   });
 
@@ -134,6 +173,7 @@ function HeroScene() {
         enableRotate={false}
         enablePan={false}
       />
+
       {/* Camera */}
       <PerspectiveCamera
         makeDefault
@@ -223,6 +263,19 @@ export default function HeroSection() {
       gsap.from(".animate-item-2", {
         scrollTrigger: {
           trigger: ".battery-section",
+          start: "top 60%",
+          toggleActions: "play none none reverse",
+        },
+        y: 60,
+        opacity: 0,
+        duration: 1.2,
+        stagger: 0.15,
+      });
+
+      // Temperature section animation
+      gsap.from(".animate-item-3", {
+        scrollTrigger: {
+          trigger: ".temp-section",
           start: "top 60%",
           toggleActions: "play none none reverse",
         },
@@ -347,6 +400,49 @@ export default function HeroSection() {
               our thermos keeps your beverages at the perfect temperature all
               day long. Stay powered from morning commute to evening workout.
             </p>
+          </div>
+        </div>
+
+        {/* Page 3: Temperature Content Overlay */}
+        <div className="temp-section w-full h-screen flex items-center justify-start px-6 md:px-12 lg:px-24 pointer-events-none">
+          <div className="w-full md:w-[45%] lg:w-[40%] p-8 md:p-12 rounded-[2.5rem] bg-white/10 backdrop-blur-sm border-[0.05] border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.15)] flex flex-col gap-8 pointer-events-auto transform transition-all duration-700 hover:bg-white/15">
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-3 animate-item-3">
+                <span className="h-[1px] w-8 bg-accent" />
+                <span className="text-accent font-bold tracking-widest uppercase text-xs">
+                  Peak Retention
+                </span>
+              </div>
+              <h2 className="text-5xl md:text-6xl text-white font-bold leading-[1.05] tracking-tight animate-item-3">
+                Hot or Cold <br />
+                <span
+                  className="bg-clip-text text-transparent animate-gradient-text"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(to right, var(--color-accent), var(--color-cream), #ffffff, var(--color-cream), var(--color-accent))",
+                    backgroundSize: "200% auto",
+                    backgroundPosition: "0% 50%",
+                  }}
+                >
+                  All Day.
+                </span>
+              </h2>
+            </div>
+
+            <p className="text-md md:text-md text-white/80 max-w-md leading-relaxed font-outfit animate-item-3">
+              Double-walled vacuum insulation keeps your drinks hot for 12 hours
+              or ice-cold for 24. Performance that never fades, no matter the
+              journey.
+            </p>
+
+            <div className="flex flex-wrap gap-5 mt-2 animate-item-3">
+              <Link
+                href="/tech"
+                className="group relative px-10 py-5 bg-accent text-white text-outfit-14 font-bold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(41,129,33,0.3)] active:scale-95"
+              >
+                Learn More
+              </Link>
+            </div>
           </div>
         </div>
       </div>
