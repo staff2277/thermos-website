@@ -6,6 +6,24 @@ import Image from "next/image";
 
 const products = [
   {
+    id: "arctic-studio",
+    name: "Arctic Studio",
+    price: "$65.00",
+    capacity: "500ml",
+    colors: ["#E3E9F2", "#B8C6DB"],
+    image: "/images/cards/Arctic Studio Thermos.png",
+    description: "The premium studio edition, engineered for those who demand minimalist perfection.",
+  },
+  {
+    id: "cinematic-pro",
+    name: "Cinematic Pro",
+    price: "$75.00",
+    capacity: "1L",
+    colors: ["#0F172A", "#334155"],
+    image: "/images/cards/Cinematic Thermos Product Photography.png",
+    description: "A professional 1L powerhouse, designed for the cinematic journey of a lifetime.",
+  },
+  {
     id: "arctic-mist",
     name: "Arctic Mist",
     price: "$45.00",
