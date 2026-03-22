@@ -100,8 +100,8 @@ export default function ProductShowcaseSection() {
       ease: "none",
       scrollTrigger: {
         trigger: containerRef.current,
-        start: "top 80%",
-        end: "bottom 20%",
+        start: "top center",
+        end: "bottom center",
         scrub: 1, // Faster responsiveness
         invalidateOnRefresh: true,
       },
@@ -145,13 +145,20 @@ export default function ProductShowcaseSection() {
       <div className="absolute inset-0 pointer-events-none z-[1] opacity-100">
         <svg 
           ref={svgRef}
-          viewBox="0 0 1000 4000" 
+          viewBox="0 0 1000 5400" 
           className="w-full h-full" 
           preserveAspectRatio="none"
         >
           <path
             ref={pathRef}
-            d="M 500 0 C 850 600, 150 1200, 500 1800 S 850 3000, 500 3600 S 150 4800, 500 5400"
+            d="M 500 0 
+               L 500 400 
+               C 850 400, 850 900, 500 900 C 150 900, 150 400, 500 400 
+               L 500 1800 
+               C 850 1800, 850 2300, 500 2300 C 150 2300, 150 1800, 500 1800 
+               L 500 3400 
+               C 850 3400, 850 3900, 500 3900 C 150 3900, 150 3400, 500 3400
+               L 500 5400"
             fill="none"
             stroke="#5EA358"
             strokeWidth="50"
