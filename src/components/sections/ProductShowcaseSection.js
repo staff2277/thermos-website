@@ -58,41 +58,44 @@ const products = [
 
 export default function ProductShowcaseSection() {
   const scrollRef = useRef(null);
-  const containerRef = useRef(null);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      if (!scrollRef.current || !containerRef.current || window.innerWidth < 1024) return;
+    const scrollContainer = scrollRef.current;
+    if (!scrollContainer) return;
 
-      const { left, width } = containerRef.current.getBoundingClientRect();
-      const mouseX = e.clientX - left;
-      const mousePercent = mouseX / width;
+    const handleWheel = (e) => {
+      // If we are at the very start and trying to scroll up, OR at the very end and trying to scroll down,
+      // allow default page scrolling. Otherwise, trap it for horizontal scroll.
+      const isAtStart = scrollContainer.scrollLeft <= 0;
+      const isAtEnd = scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth - 1;
       
-      const maxScroll = scrollRef.current.scrollWidth - scrollRef.current.clientWidth;
-      const targetScroll = maxScroll * mousePercent;
+      const isScrollingUp = e.deltaY < 0;
+      const isScrollingDown = e.deltaY > 0;
 
-      gsap.to(scrollRef.current, {
-        scrollLeft: targetScroll,
-        duration: 2,
+      if ((isAtStart && isScrollingUp) || (isAtEnd && isScrollingDown)) {
+        return;
+      }
+
+      // Intercept wheel for horizontal movement
+      e.preventDefault();
+      
+      gsap.to(scrollContainer, {
+        scrollLeft: scrollContainer.scrollLeft + e.deltaY * 2,
+        duration: 0.5,
         ease: "power2.out",
         overwrite: "auto"
       });
     };
 
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener("mousemove", handleMouseMove);
-    }
-
+    scrollContainer.addEventListener("wheel", handleWheel, { passive: false });
+    
     return () => {
-      if (container) {
-        container.removeEventListener("mousemove", handleMouseMove);
-      }
+      scrollContainer.removeEventListener("wheel", handleWheel);
     };
   }, []);
 
   return (
-    <section className="relative w-full py-24 bg-black overflow-hidden" ref={containerRef}>
+    <section className="relative w-full py-24 bg-black overflow-hidden">
       <div className="container mx-auto px-6 md:px-12 lg:px-24 flex flex-col gap-12">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-white/10">
           <div className="flex flex-col gap-2">
@@ -118,7 +121,7 @@ export default function ProductShowcaseSection() {
         <div className="relative w-full">
           <div 
             ref={scrollRef}
-            className="flex overflow-x-auto gap-6 pb-12 snap-x snap-mandatory lg:snap-none hide-scrollbar group transition-all cursor-none lg:cursor-default"
+            className="flex overflow-x-auto gap-6 pb-12 snap-x snap-mandatory lg:snap-none hide-scrollbar group transition-all"
             style={{
               scrollbarWidth: "none",
               msOverflowStyle: "none",
