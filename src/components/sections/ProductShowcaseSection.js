@@ -11,56 +11,8 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
 
-const products = [
-  {
-    id: "arctic-studio",
-    name: "Arctic Studio",
-    price: "$65.00",
-    capacity: "500ml",
-    colors: ["#E3E9F2", "#B8C6DB"],
-    image: "/images/cards/Arctic Studio Thermos.png",
-  },
-  {
-    id: "cinematic-pro",
-    name: "Cinematic Pro",
-    price: "$75.00",
-    capacity: "1L",
-    colors: ["#0F172A", "#334155"],
-    image: "/images/cards/Cinematic Thermos Product Photography.png",
-  },
-  {
-    id: "arctic-mist",
-    name: "Arctic Mist",
-    price: "$45.00",
-    capacity: "500ml",
-    colors: ["#FFFFFF", "#E0F2F1"],
-    image: "/images/cards/Thermos Engraved Bottle (1).jpg",
-  },
-  {
-    id: "obsidian-prime",
-    name: "Obsidian Prime",
-    price: "$55.00",
-    capacity: "750ml",
-    colors: ["#1A1A1A", "#333333"],
-    image: "/images/cards/Thermos Engraved Bottle (2).jpg",
-  },
-  {
-    id: "deep-forest",
-    name: "Deep Forest",
-    price: "$49.00",
-    capacity: "600ml",
-    colors: ["#31482F", "#1B2E1A"],
-    image: "/images/cards/Thermos Engraved Bottle (3).jpg",
-  },
-  {
-    id: "ruby-core",
-    name: "Ruby Core",
-    price: "$52.00",
-    capacity: "600ml",
-    colors: ["#6D0000", "#9E0000"],
-    image: "/images/cards/Thermos Engraved Bottle (4).jpg",
-  },
-];
+import { products } from "@/data/products";
+const showcaseProducts = products.slice(0, 6);
 
 export default function ProductShowcaseSection() {
   const scrollRef = useRef(null);
@@ -184,7 +136,7 @@ export default function ProductShowcaseSection() {
               msOverflowStyle: "none",
             }}
           >
-            {products.map((product) => (
+            {showcaseProducts.map((product) => (
               <div
                 key={product.id}
                 className="flex-shrink-0 w-[260px] md:w-[320px] lg:w-[380px] snap-center lg:snap-align-none bg-transparent"

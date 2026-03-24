@@ -4,62 +4,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
-const products = [
-  {
-    id: "arctic-studio",
-    name: "Arctic Studio",
-    price: "$65.00",
-    capacity: "500ml",
-    colors: ["#E3E9F2", "#B8C6DB"],
-    image: "/images/cards/Arctic Studio Thermos.png",
-    description: "The premium studio edition, engineered for those who demand minimalist perfection.",
-  },
-  {
-    id: "cinematic-pro",
-    name: "Cinematic Pro",
-    price: "$75.00",
-    capacity: "1L",
-    colors: ["#0F172A", "#334155"],
-    image: "/images/cards/Cinematic Thermos Product Photography.png",
-    description: "A professional 1L powerhouse, designed for the cinematic journey of a lifetime.",
-  },
-  {
-    id: "arctic-mist",
-    name: "Arctic Mist",
-    price: "$45.00",
-    capacity: "500ml",
-    colors: ["#FFFFFF", "#E0F2F1"],
-    image: "/images/cards/Thermos Engraved Bottle (1).jpg",
-    description: "Premium double-walled vacuum insulation for pure hydration anywhere.",
-  },
-  {
-    id: "obsidian-prime",
-    name: "Obsidian Prime",
-    price: "$55.00",
-    capacity: "750ml",
-    colors: ["#1A1A1A", "#333333"],
-    image: "/images/cards/Thermos Engraved Bottle (2).jpg",
-    description: "Our largest capacity with a sleek matte obsidian finish.",
-  },
-  {
-    id: "deep-forest",
-    name: "Deep Forest",
-    price: "$49.00",
-    capacity: "600ml",
-    colors: ["#31482F", "#1B2E1A"],
-    image: "/images/cards/Thermos Engraved Bottle (3).jpg",
-    description: "Inspired by the serenity of nature's deepest forests.",
-  },
-  {
-    id: "ruby-core",
-    name: "Ruby Core",
-    price: "$52.00",
-    capacity: "600ml",
-    colors: ["#6D0000", "#9E0000"],
-    image: "/images/cards/Thermos Engraved Bottle (4).jpg",
-    description: "Bold performance in a vibrant ruby red casing.",
-  },
-];
+import { products } from "@/data/products";
 
 export default function ProductPage() {
   const { id } = useParams();
