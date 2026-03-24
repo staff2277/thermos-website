@@ -1,57 +1,14 @@
 "use client";
 
-import { useRef, useEffect, useState, useMemo } from "react";
+import { useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Float, MeshTransmissionMaterial } from "@react-three/drei";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
-}
-
-// --- ANTIGRAVITY BACKGROUND ELEMENTS ---
-function FloatingBlob({ position, scale, color }) {
-  const meshRef = useRef();
-  const { viewport, mouse } = useThree();
-  const randomFactor = useMemo(() => Math.random() * 0.5 + 0.2, []);
-
-  useFrame((state) => {
-    const time = state.clock.getElapsedTime();
-    // Autonomous drift
-    meshRef.current.position.x =
-      position[0] + Math.sin(time * randomFactor) * 0.5;
-    meshRef.current.position.y =
-      position[1] + Math.cos(time * randomFactor) * 0.5;
-
-    // Mouse Interaction (Anti-gravity repulsion)
-    const targetX = (mouse.x * viewport.width) / 2;
-    const targetY = (mouse.y * viewport.height) / 2;
-    meshRef.current.position.x +=
-      (targetX - meshRef.current.position.x) * 0.005;
-    meshRef.current.position.y +=
-      (targetY - meshRef.current.position.y) * 0.005;
-
-    meshRef.current.rotation.x = meshRef.current.rotation.y += 0.002;
-  });
-
-  return (
-    <mesh ref={meshRef} position={position} scale={scale}>
-      <icosahedronGeometry args={[1, 15]} />
-      <MeshTransmissionMaterial
-        backside
-        samples={4}
-        thickness={0.5}
-        chromaticAberration={0.02}
-        color={color}
-        transparent
-        opacity={0.4}
-      />
-    </mesh>
-  );
 }
 
 const products = [
@@ -109,26 +66,30 @@ export default function ProductShowcaseSection() {
   const scrollRef = useRef(null);
   const containerRef = useRef(null);
   const pathRef = useRef(null);
-
-  // Forest Green Color Variable
-  const ACCENT_COLOR = "#298121";
+  const svgRef = useRef(null);
 
   useGSAP(
     () => {
       if (!pathRef.current) return;
+
       const length = pathRef.current.getTotalLength();
+
+      // Set initial dash state
       gsap.set(pathRef.current, {
         strokeDasharray: length,
         strokeDashoffset: length,
       });
 
+      // Animate dash offset based on scroll
       gsap.to(pathRef.current, {
         strokeDashoffset: 0,
+        ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top center",
           end: "bottom center",
-          scrub: 1.5,
+          scrub: 1, // Faster responsiveness
+          invalidateOnRefresh: true,
         },
       });
     },
@@ -136,84 +97,75 @@ export default function ProductShowcaseSection() {
   );
 
   useEffect(() => {
+    // Horizontal wheel scroll logic
     const scrollContainer = scrollRef.current;
-    if (!scrollContainer) return;
-    const handleWheel = (e) => {
-      const isAtStart = scrollContainer.scrollLeft <= 0;
-      const isAtEnd =
-        scrollContainer.scrollLeft + scrollContainer.clientWidth >=
-        scrollContainer.scrollWidth - 1;
-      if ((isAtStart && e.deltaY < 0) || (isAtEnd && e.deltaY > 0)) return;
-      e.preventDefault();
-      gsap.to(scrollContainer, {
-        scrollLeft: scrollContainer.scrollLeft + e.deltaY * 2,
-        duration: 0.6,
-        ease: "power2.out",
-        overwrite: "auto",
+    if (scrollContainer) {
+      const handleWheel = (e) => {
+        const isAtStart = scrollContainer.scrollLeft <= 0;
+        const isAtEnd =
+          scrollContainer.scrollLeft + scrollContainer.clientWidth >=
+          scrollContainer.scrollWidth - 1;
+        const isScrollingUp = e.deltaY < 0;
+        const isScrollingDown = e.deltaY > 0;
+        if ((isAtStart && isScrollingUp) || (isAtEnd && isScrollingDown))
+          return;
+        e.preventDefault();
+        gsap.to(scrollContainer, {
+          scrollLeft: scrollContainer.scrollLeft + e.deltaY * 2,
+          duration: 0.5,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+      };
+      scrollContainer.addEventListener("wheel", handleWheel, {
+        passive: false,
       });
-    };
-    scrollContainer.addEventListener("wheel", handleWheel, { passive: false });
-    return () => scrollContainer.removeEventListener("wheel", handleWheel);
+      return () => {
+        scrollContainer.removeEventListener("wheel", handleWheel);
+      };
+    }
   }, []);
 
   return (
     <section
       ref={containerRef}
-      className="relative w-full py-24 bg-black overflow-hidden"
+      className="relative w-full py-20 bg-black overflow-hidden"
     >
-      {/* 1. ANTIGRAVITY R3F BACKGROUND */}
-      <div className="absolute inset-0 z-[0] pointer-events-none opacity-60">
-        <Canvas camera={{ position: [0, 0, 10], fov: 35 }}>
-          <ambientLight intensity={0.4} />
-          <pointLight position={[10, 10, 10]} intensity={1} />
-          <FloatingBlob
-            position={[-5, 2, -2]}
-            scale={1.5}
-            color={ACCENT_COLOR}
-          />
-          <FloatingBlob position={[4, -3, -1]} scale={2} color="#ffffff" />
-          <FloatingBlob position={[0, 4, -4]} scale={3} color={ACCENT_COLOR} />
-        </Canvas>
-      </div>
-
-      {/* 2. STYLISH LIQUID SVG PATH */}
-      <div className="absolute inset-0 pointer-events-none z-[1] opacity-30">
+      {/* Background SVG Animated Path */}
+      <div className="absolute inset-0 pointer-events-none z-[1] opacity-100">
         <svg
-          viewBox="0 0 1000 1000"
+          ref={svgRef}
+          viewBox="0 0 1000 5400"
           className="w-full h-full"
           preserveAspectRatio="none"
         >
           <path
             ref={pathRef}
-            d="M 500 0 Q 800 250 500 500 T 500 1000"
+            d="M 500 0 L 500 400 C 850 400, 850 900, 500 900 C 150 900, 150 400, 500 400 L 500 1800 C 850 1800, 850 2300, 500 2300 C 150 2300, 150 1800, 500 1800 L 500 3400 C 850 3400, 850 3900, 500 3900 C 150 3900, 150 3400, 500 3400 L 500 5400"
             fill="none"
-            stroke={ACCENT_COLOR}
-            strokeWidth="2"
+            stroke="#5EA358"
+            strokeWidth="50"
             strokeLinecap="round"
             vectorEffect="non-scaling-stroke"
-            className="filter drop-shadow-[0_0_20px_#298121]"
+            className="filter drop-shadow-[0_0_15px_rgba(94,163,88,0.4)]"
           />
         </svg>
       </div>
 
-      <div className="max-w-[95%] mx-auto px-6 md:px-12 lg:px-24 flex flex-col gap-16 relative z-10">
-        {/* HEADER SECTION */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 pb-12 border-b border-white/10">
-          <div className="flex flex-col gap-6">
-            <span
-              className="font-bold tracking-[0.5em] uppercase text-xs"
-              style={{ color: ACCENT_COLOR }}
-            >
+      <div className="max-w-[95%] mx-auto px-6 md:px-12 lg:px-24 flex flex-col gap-12 relative z-20">
+        <div className="flex flex-col border md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-white/5">
+          <div className="flex flex-col gap-4">
+            <span className="text-accent font-bold tracking-[0.4em] uppercase text-xs">
               Legacy Series
             </span>
-            <h2 className="text-6xl md:text-7xl lg:text-8xl text-white font-bold tracking-tighter leading-none">
+            <h2 className="text-5xl md:text-6xl lg:text-7xl text-white font-bold tracking-tight">
               Select Your <br />
-              <span style={{ color: ACCENT_COLOR }}>Vessel.</span>
+              <span className="text-accent">Vessel.</span>
             </h2>
           </div>
           <Link
             href="/shop"
-            className="group px-12 py-6 bg-white/5 backdrop-blur-xl border border-white/10 text-white rounded-full transition-all duration-500 font-bold flex items-center gap-4 hover:border-[#298121]/50"
+            className="group px-10 py-5 bg-white/5 backdrop-blur-md border border-white/10 text-white rounded-full hover:bg-accent hover:border-accent transition-all duration-500 font-black flex items-center gap-3"
           >
             Explore Collective
             <span className="group-hover:translate-x-2 transition-transform">
@@ -222,64 +174,61 @@ export default function ProductShowcaseSection() {
           </Link>
         </div>
 
-        {/* PRODUCT CARDS CONTAINER */}
-        <div className="relative -mx-6 md:-mx-12 lg:-mx-24">
+        {/* Horizontal Scroll Container */}
+        <div className="relative -mx-6 md:-mx-12 lg:-mx-24 py-12 ">
           <div
             ref={scrollRef}
-            className="flex overflow-x-auto gap-10 pb-20 hide-scrollbar px-6 md:px-12 lg:px-24"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            className="flex overflow-x-auto gap-8 pb-12 snap-x snap-mandatory lg:snap-none hide-scrollbar group px-6 md:px-12 lg:px-24"
+            style={{
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
           >
             {products.map((product) => (
               <div
                 key={product.id}
-                className="flex-shrink-0 w-[280px] md:w-[350px] lg:w-[420px]"
+                className="flex-shrink-0 w-[260px] md:w-[320px] lg:w-[380px] snap-center lg:snap-align-none bg-transparent"
               >
                 <Link
                   href={`/product/${product.id}`}
-                  className="group/card block relative aspect-[3/4] rounded-[3rem] overflow-hidden bg-neutral-950 border border-white/5 transition-all duration-700 hover:border-[#298121]/40"
+                  className="block relative aspect-[4/5] rounded-[2.5rem] overflow-hidden group/card bg-neutral-900 border border-white/5 transition-all duration-700 hover:border-accent/40 shadow-[0_40px_100px_rgba(0,0,0,0.5)]"
                 >
                   <Image
                     src={product.image}
                     alt={product.name}
                     fill
-                    className="object-cover transition-transform duration-[1500ms] group-hover/card:scale-110 grayscale-[40%] group-hover/card:grayscale-0"
-                    sizes="(max-width: 768px) 240px, 360px"
+                    className="object-cover transition-transform duration-[1200ms] group-hover/card:scale-110 grayscale-[30%] group-hover/card:grayscale-0"
+                    sizes="(max-width: 768px) 260px, 380px"
                   />
 
-                  {/* Glassmorphic Footer */}
-                  <div className="absolute inset-x-0 bottom-0 h-[35%] backdrop-blur-2xl bg-black/20 border-t border-white/10 p-8 flex flex-col justify-between transition-all duration-500 group-hover/card:h-[40%]">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="text-white font-bold text-2xl tracking-tight">
+                  {/* Glassmorphic Overlay (30%) */}
+                  <div className="absolute inset-x-0 bottom-0 h-[30%] backdrop-blur-md border-t border-white/10 p-6 md:p-8 flex flex-col justify-between transition-all duration-700 group-hover/card:h-[35%]">
+                    <div className="flex justify-between items-start gap-4">
+                      <div className="flex flex-col gap-1">
+                        <h3 className="text-white font-black text-xl md:text-2xl tracking-tighter">
                           {product.name}
                         </h3>
-                        <p className="text-white/40 text-xs font-bold tracking-widest uppercase mt-1">
+                        <p className="text-white/40 text-[10px] md:text-xs font-bold tracking-widest uppercase">
                           {product.capacity} / Edition
                         </p>
                       </div>
-                      <span className="text-white font-bold text-xl">
+                      <span className="text-white font-black text-lg md:text-xl">
                         {product.price}
                       </span>
                     </div>
 
-                    <div className="flex justify-between items-center opacity-0 group-hover/card:opacity-100 translate-y-4 group-hover/card:translate-y-0 transition-all duration-500">
-                      <div className="flex gap-2">
-                        {product.colors.map((c, i) => (
+                    <div className="flex justify-between items-center opacity-0 group-hover/card:opacity-100 transition-all duration-500 delay-100 transform translate-y-4 group-hover/card:translate-y-0">
+                      <div className="flex gap-3">
+                        {product.colors.map((color, idx) => (
                           <div
-                            key={i}
-                            className="w-5 h-5 rounded-full border border-white/20"
-                            style={{ backgroundColor: c }}
+                            key={idx}
+                            className="w-6 h-6 rounded-full border-2 border-white/20 shadow-xl"
+                            style={{ backgroundColor: color }}
                           />
                         ))}
                       </div>
-                      <span
-                        className="text-xs font-black tracking-widest border-b-2 pb-1"
-                        style={{
-                          color: ACCENT_COLOR,
-                          borderColor: ACCENT_COLOR,
-                        }}
-                      >
-                        SECURE ACCESS
+                      <span className="text-[12px] text-accent font-black tracking-widest border-b-2 border-accent pb-1">
+                        GET ACCESS
                       </span>
                     </div>
                   </div>
@@ -287,21 +236,22 @@ export default function ProductShowcaseSection() {
               </div>
             ))}
           </div>
+
+          {/* Premium Gradient Overlays */}
+          <div className="absolute top-0 right-0 h-full w-48 bg-gradient-to-l from-black via-black/30 to-transparent pointer-events-none z-10 hidden lg:block" />
+          <div className="absolute top-0 left-0 h-full w-48 bg-gradient-to-r from-black via-black/30 to-transparent pointer-events-none z-10 hidden lg:block" />
         </div>
 
-        {/* BOTTOM CTA */}
-        <div className="flex justify-center pb-10">
+        {/* CTA Bottom */}
+        <div className="flex justify-center">
           <Link
             href="/shop"
-            className="group relative px-20 py-8 bg-white text-black font-black rounded-full overflow-hidden transition-transform hover:scale-105"
+            className="group relative px-16 py-7 bg-white text-black text-outfit-14 font-black rounded-full transition-all duration-500 hover:scale-105 active:scale-95 shadow-[0_30px_80px_rgba(255,255,255,0.05)] overflow-hidden flex items-center justify-center"
           >
-            <span className="relative z-10 transition-transform duration-500 group-hover:-translate-y-12 block">
+            <span className="relative z-10 transition-all duration-300 group-hover:opacity-0 group-hover:-translate-y-4">
               Limited Release &rarr;
             </span>
-            <div
-              className="absolute inset-0 flex items-center justify-center translate-y-full group-hover:translate-y-0 transition-transform duration-500 text-white"
-              style={{ backgroundColor: ACCENT_COLOR }}
-            >
+            <div className="absolute inset-0 bg-accent translate-y-full group-hover:translate-y-0 text-white transition-all duration-500 delay-75 flex items-center justify-center font-black">
               SECURE YOURS
             </div>
           </Link>

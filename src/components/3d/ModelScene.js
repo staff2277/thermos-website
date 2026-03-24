@@ -37,8 +37,11 @@ function BottleMesh({ name, position, rotation, scale, nodes, materials }) {
   );
 }
 
+const MODEL_URL = "/models/thermos4.glb";
+const DRACO_DECODER_PATH = "https://www.gstatic.com/draco/versioned/decoders/1.5.5/";
+
 export function ModelScene({ isHero = false, batteryRef, ...props }) {
-  const { nodes, materials } = useGLTF("/models/thermos4.glb");
+  const { nodes, materials } = useGLTF(MODEL_URL, DRACO_DECODER_PATH);
 
   return (
     <group {...props} dispose={null}>
@@ -118,4 +121,4 @@ export function ModelScene({ isHero = false, batteryRef, ...props }) {
   );
 }
 
-useGLTF.preload("/models/thermos4.glb");
+useGLTF.preload(MODEL_URL, DRACO_DECODER_PATH);
