@@ -5,10 +5,10 @@
   --font-outfit: var(--font-outfit);
 
   /* Custom Color Palette */
-  --color-primary: #31482F;    /* Deep Forest Green */
-  --color-accent: #298121;     /* New Forest Green Accent */
-  --color-sand: #BBA081;       /* Warm Earthy Beige */
-  --color-cream: #D6CABB;      /* Soft Light Sand */
+  --color-primary: #31482f; /* Deep Forest Green */
+  --color-accent: #298121; /* New Forest Green Accent */
+  --color-sand: #bba081; /* Warm Earthy Beige */
+  --color-cream: #d6cabb; /* Soft Light Sand */
 }
 
 @layer utilities {
@@ -18,7 +18,8 @@
   }
 
   @keyframes gradient-x {
-    0%, 100% {
+    0%,
+    100% {
       background-position: 0% 50%;
     }
     50% {
@@ -55,6 +56,9 @@
     font-family: var(--font-outfit);
     font-size: 72px;
     font-weight: 600;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }
 
