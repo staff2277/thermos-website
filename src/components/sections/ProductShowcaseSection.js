@@ -67,21 +67,7 @@ export default function ProductShowcaseSection() {
   const containerRef = useRef(null);
   const pathRef = useRef(null);
   const svgRef = useRef(null);
-  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
 
-  useEffect(() => {
-    // Mouse gradient movement
-    const handleMouseMove = (e) => {
-      const { clientX, clientY } = e;
-      const x = (clientX / window.innerWidth) * 100;
-      const y = (clientY / window.innerHeight) * 100;
-      setMousePos({ x, y });
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
 
   useGSAP(
     () => {
@@ -146,7 +132,7 @@ export default function ProductShowcaseSection() {
       ref={containerRef}
       className="relative w-full py-20 bg-black overflow-hidden"
       style={{
-        background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, rgba(49, 72, 47, 0.3) 0%, rgba(0, 0, 0, 1) 80%)`,
+        background: "radial-gradient(circle at 50% 50%, rgba(49, 72, 47, 0.15) 0%, rgba(0, 0, 0, 1) 100%)",
       }}
     >
       {/* Background SVG Animated Path */}
