@@ -13,7 +13,6 @@ export default function Navbar() {
   const dropdownRef = useRef();
 
   const routes = [
-    { name: "Home", path: "/" },
     { name: "Shop", path: "/shop" },
     { name: "Reviews", path: "/reviews" },
     { name: "Contact", path: "/contact" },
@@ -29,14 +28,14 @@ export default function Navbar() {
   }, [isProfileOpen]);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-[60] transition-all duration-300">
-      <div className="max-w-7xl px-6 md:px-10 mx-auto py-6 flex items-center justify-between backdrop-blur-md bg-black/10 border-b border-white/5 shadow-2xl">
+    <nav className="absolute top-0 left-0 right-0 z-[60] transition-all duration-300">
+      <div className="max-w-7xl px-10 mx-auto py-6 flex items-center justify-between py-6 backdrop-blur-2xl">
         {/* Logo */}
         <Link
           href="/"
-          className="text-outfit-24 font-bold tracking-tighter text-white hover:scale-105 transition-transform"
+          className="text-outfit-24 font-bold tracking-tighter text-white"
         >
-          THERMOS<span className="text-accent underline decoration-2 underline-offset-4">.</span>
+          THERMOS<span className="text-accent">.</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -45,7 +44,7 @@ export default function Navbar() {
             <Link
               key={route.path}
               href={route.path}
-              className="text-[12px] uppercase tracking-[0.2em] text-white/50 hover:text-white transition-all duration-300 font-black"
+              className="text-outfit-14 text-white/70 hover:text-accent transition-all duration-300 font-medium"
             >
               {route.name}
             </Link>
@@ -53,28 +52,28 @@ export default function Navbar() {
         </div>
 
         {/* Action Button */}
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-6">
           {/* Profile Section */}
           <div className="relative">
             {user ? (
               <button 
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
-                className="flex items-center gap-3 group px-4 py-2 rounded-full hover:bg-white/5 transition-all"
+                className="flex items-center gap-2 group transition-all"
               >
                 <div className="w-8 h-8 rounded-full bg-accent/20 border border-accent/30 flex items-center justify-center text-[10px] font-black text-accent overflow-hidden">
                   {user.name[0]}
                 </div>
-                <span className="hidden md:block text-xs font-black uppercase tracking-widest text-white/60 group-hover:text-white">
-                  {user.name.split(' ')[0]}
+                <span className="hidden md:block text-outfit-14 font-semibold text-white group-hover:text-accent transition-colors">
+                   Profile
                 </span>
               </button>
             ) : (
               <Link
                 href="/sign-in"
-                className="group flex items-center gap-3 text-white/60 hover:text-white transition-all"
+                className="group flex items-center gap-3 text-white transition-all"
               >
-                <ProfileIcon color="currentColor" size={20} />
-                <span className="text-xs font-black uppercase tracking-widest">Sign In</span>
+                <ProfileIcon color="currentColor" size={24} />
+                <span className="text-outfit-14 font-semibold text-white group-hover:text-accent transition-colors">Sign In</span>
               </Link>
             )}
 
@@ -95,13 +94,6 @@ export default function Navbar() {
                 >
                   Dashboard
                 </Link>
-                <Link 
-                  href="/orders" 
-                  onClick={() => setIsProfileOpen(false)}
-                  className="px-4 py-3 hover:bg-white/5 rounded-xl text-xs font-black uppercase tracking-widest text-white/60 hover:text-white transition-all"
-                >
-                  Orders
-                </Link>
                 <button 
                   onClick={() => {
                     logout();
@@ -120,11 +112,11 @@ export default function Navbar() {
           {/* Cart Button */}
           <button 
             onClick={() => setIsCartOpen(true)}
-            className="text-white hover:text-accent transition-all duration-300 hover:scale-110 cursor-pointer relative p-2"
+            className="text-white hover:text-accent transition-all duration-300 hover:scale-110 cursor-pointer relative"
           >
             <CartIcon color="currentColor" size={24} />
             {cart.length > 0 && (
-              <span className="absolute top-0 right-0 w-4 h-4 bg-accent text-[10px] text-white font-black rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(41,129,33,0.5)]">
+              <span className="absolute -top-2 -right-2 w-4 h-4 bg-accent text-[10px] text-white font-black rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(41,129,33,0.5)]">
                 {cart.length}
               </span>
             )}
