@@ -38,16 +38,6 @@ const features = [
       </svg>
     ),
   },
-  {
-    title: "Leak Proof",
-    description: "Advanced lid mechanism with a zero-spill magnetic locking system.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <circle cx="12" cy="12" r="10" />
-        <path d="M12 8v4M12 16h.01" />
-      </svg>
-    ),
-  },
 ];
 
 export default function FeaturesSection() {
@@ -86,7 +76,7 @@ export default function FeaturesSection() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, idx) => (
             <div 
               key={idx} 
