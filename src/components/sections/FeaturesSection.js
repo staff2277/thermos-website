@@ -65,26 +65,61 @@ export default function FeaturesSection() {
           invalidateOnRefresh: true,
         },
       });
+
+      // Header entrance animation
+      gsap.from(".animate-header", {
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 70%",
+          toggleActions: "play none none reverse",
+        },
+        y: 60,
+        opacity: 0,
+        duration: 1.2,
+        stagger: 0.15,
+        ease: "power4.out",
+      });
+
+      // Continuous gradient animation
+      gsap.to(".animate-gradient-text", {
+        backgroundPosition: "-200% 50%",
+        duration: 4,
+        repeat: -1,
+        ease: "linear",
+      });
     },
     { scope: containerRef },
   );
 
   return (
-    <section ref={containerRef} className="relative w-full py-48 bg-black overflow-hidden px-6 md:px-12 lg:px-24">
+    <section
+      ref={containerRef}
+      className="relative w-full py-48 bg-black overflow-hidden px-6 md:px-12 lg:px-24"
+    >
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-accent/5 rounded-full blur-[150px] -z-10 translate-x-1/2 -translate-y-1/2" />
-      
+
       <div className="max-w-7xl mx-auto flex flex-col gap-24 relative z-10">
         <div className="flex flex-col gap-6 max-w-2xl">
           <div className="flex items-center gap-3">
-            <span className="h-[1px] w-12 bg-accent" />
-            <span className="text-accent font-bold tracking-[0.3em] uppercase text-xs">
+            <span className="animate-header h-[1px] w-12 bg-accent" />
+            <span className="animate-header text-accent font-bold tracking-[0.3em] uppercase text-xs">
               Engineering Specs
             </span>
           </div>
-          <h2 className="text-6xl md:text-7xl font-black tracking-tighter leading-tight text-white">
+          <h2 className="animate-header text-6xl md:text-7xl font-black tracking-tighter leading-tight text-white">
             THE PEAK OF <br />
-            <span className="text-white/20">PERFORMANCE.</span>
+            <span
+              className="bg-clip-text text-transparent animate-gradient-text"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, var(--color-accent), var(--color-cream), #ffffff, var(--color-cream), var(--color-accent))",
+                backgroundSize: "200% auto",
+                backgroundPosition: "0% 50%",
+              }}
+            >
+              PERFORMANCE.
+            </span>
           </h2>
         </div>
 

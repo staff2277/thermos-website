@@ -1,9 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 export default function ContactPage() {
+  const containerRef = useRef();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -22,10 +25,17 @@ export default function ContactPage() {
     
     setIsSubmitting(false);
     setIsSubmitted(true);
-    
-    // In a real app, you would send this to an API route that uses
-    // something like Resend or Nodemailer to email thermostest@gmail.com
   };
+
+  useGSAP(() => {
+    // Continuous gradient animation
+    gsap.to(".animate-gradient-text", {
+      backgroundPosition: "-200% 50%",
+      duration: 4,
+      repeat: -1,
+      ease: "linear",
+    });
+  }, { scope: containerRef });
 
   if (isSubmitted) {
     return (
@@ -52,7 +62,7 @@ export default function ContactPage() {
   }
 
   return (
-    <main className="min-h-screen bg-black text-white pt-48 pb-24 px-6 md:px-12 lg:px-24">
+    <main ref={containerRef} className="min-h-screen bg-black text-white pt-48 pb-24 px-6 md:px-12 lg:px-24">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-24">
         
         {/* Contact Info (Left) */}
@@ -66,7 +76,17 @@ export default function ContactPage() {
             </div>
             <h1 className="text-6xl md:text-7xl font-black tracking-tighter leading-tight">
               ESTABLISH <br />
-              <span className="text-white/20">CONTACT.</span>
+              <span
+                className="bg-clip-text text-transparent animate-gradient-text"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to right, var(--color-accent), var(--color-cream), #ffffff, var(--color-cream), var(--color-accent))",
+                  backgroundSize: "200% auto",
+                  backgroundPosition: "0% 50%",
+                }}
+              >
+                CONTACT.
+              </span>
             </h1>
             <p className="text-white/40 text-lg font-medium leading-relaxed max-w-md">
               Whether you're exploring partnership opportunities or need technical support for your vessel, our team is standing by.

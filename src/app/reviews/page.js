@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import { reviews } from "@/data/reviews";
 
 const Star = () => (
@@ -21,13 +23,24 @@ const VerifiedBadge = () => (
 
 export default function ReviewsPage() {
   const [filter, setFilter] = useState(5);
+  const containerRef = useRef();
   
   const filteredReviews = filter === "All" 
     ? reviews 
     : reviews.filter(r => r.rating === filter);
 
+  useGSAP(() => {
+    // Continuous gradient animation
+    gsap.to(".animate-gradient-text", {
+      backgroundPosition: "-200% 50%",
+      duration: 4,
+      repeat: -1,
+      ease: "linear",
+    });
+  }, { scope: containerRef });
+
   return (
-    <main className="min-h-screen bg-black text-white pt-32 pb-24 px-6 md:px-12 lg:px-24">
+    <main ref={containerRef} className="min-h-screen bg-black text-white pt-32 pb-24 px-6 md:px-12 lg:px-24">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-20 border-b border-white/5 pb-16">
         <div className="flex flex-col gap-6 max-w-2xl">
@@ -39,7 +52,17 @@ export default function ReviewsPage() {
           </div>
           <h1 className="text-6xl md:text-7xl font-black tracking-tighter leading-tight">
             TRUST IN <br />
-            <span className="text-white/20">PERFORMANCE.</span>
+            <span
+              className="bg-clip-text text-transparent animate-gradient-text"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, var(--color-accent), var(--color-cream), #ffffff, var(--color-cream), var(--color-accent))",
+                backgroundSize: "200% auto",
+                backgroundPosition: "0% 50%",
+              }}
+            >
+              PERFORMANCE.
+            </span>
           </h1>
           <p className="text-white/40 text-lg font-medium leading-relaxed max-w-lg">
             Hear from the explorers, commuters, and designers who rely on our thermal engineering every single day.

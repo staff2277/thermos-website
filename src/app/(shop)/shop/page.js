@@ -1,12 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import { products } from "@/data/products";
 
 export default function ShopPage() {
   const [activeCategory, setActiveCategory] = useState("All");
+  const containerRef = useRef();
   
   const categories = ["All", ...new Set(products.map(p => p.category))];
   
@@ -14,8 +17,18 @@ export default function ShopPage() {
     ? products 
     : products.filter(p => p.category === activeCategory);
 
+  useGSAP(() => {
+    // Continuous gradient animation
+    gsap.to(".animate-gradient-text", {
+      backgroundPosition: "-200% 50%",
+      duration: 4,
+      repeat: -1,
+      ease: "linear",
+    });
+  }, { scope: containerRef });
+
   return (
-    <main className="min-h-screen bg-black text-white pt-32 pb-24 px-6 md:px-12 lg:px-24">
+    <main ref={containerRef} className="min-h-screen bg-black text-white pt-32 pb-24 px-6 md:px-12 lg:px-24">
       {/* Header Section */}
       <div className="flex flex-col gap-6 mb-16">
         <div className="flex items-center gap-3">
@@ -25,7 +38,18 @@ export default function ShopPage() {
           </span>
         </div>
         <h1 className="text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter">
-          SHOP <span className="text-white/20">ALL.</span>
+          SHOP <br />
+          <span
+            className="bg-clip-text text-transparent animate-gradient-text"
+            style={{
+              backgroundImage:
+                "linear-gradient(to right, var(--color-accent), var(--color-cream), #ffffff, var(--color-cream), var(--color-accent))",
+              backgroundSize: "200% auto",
+              backgroundPosition: "0% 50%",
+            }}
+          >
+            ALL.
+          </span>
         </h1>
         <p className="text-white/40 max-w-xl text-lg font-medium leading-relaxed">
           Explore our complete range of high-performance thermal vessels. Engineered for precision, designed for life.

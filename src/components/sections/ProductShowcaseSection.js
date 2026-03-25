@@ -44,6 +44,27 @@ export default function ProductShowcaseSection() {
           invalidateOnRefresh: true,
         },
       });
+
+      // Header entrance animation
+      gsap.from(".animate-product", {
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 70%",
+          toggleActions: "play none none reverse",
+        },
+        y: 60,
+        opacity: 0,
+        duration: 1.2,
+        stagger: 0.15,
+        ease: "power4.out",
+      });
+      // Continuous gradient animation
+      gsap.to(".animate-gradient-text", {
+        backgroundPosition: "-200% 50%",
+        duration: 4,
+        repeat: -1,
+        ease: "linear",
+      });
     },
     { scope: containerRef },
   );
@@ -107,17 +128,27 @@ export default function ProductShowcaseSection() {
       <div className="max-w-[95%] mx-auto px-6 md:px-12 lg:px-24 flex flex-col gap-12 relative z-20">
         <div className="flex flex-col border md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-white/5">
           <div className="flex flex-col gap-4">
-            <span className="text-accent font-bold tracking-[0.4em] uppercase text-xs">
+            <span className="animate-product text-accent font-bold tracking-[0.4em] uppercase text-xs">
               Legacy Series
             </span>
-            <h2 className="text-5xl md:text-6xl lg:text-7xl text-white font-bold tracking-tight">
+            <h2 className="animate-product text-5xl md:text-6xl lg:text-7xl text-white font-bold tracking-tight">
               Select Your <br />
-              <span className="text-accent">Vessel.</span>
+              <span
+                className="bg-clip-text text-transparent animate-gradient-text"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to right, var(--color-accent), var(--color-cream), #ffffff, var(--color-cream), var(--color-accent))",
+                  backgroundSize: "200% auto",
+                  backgroundPosition: "0% 50%",
+                }}
+              >
+                Vessel.
+              </span>
             </h2>
           </div>
           <Link
             href="/shop"
-            className="group px-10 py-5 bg-white/5 backdrop-blur-md border border-white/10 text-white rounded-full hover:bg-accent hover:border-accent transition-all duration-500 font-black flex items-center gap-3"
+            className="animate-product group px-10 py-5 bg-white/5 backdrop-blur-md border border-white/10 text-white rounded-full hover:bg-accent hover:border-accent transition-all duration-500 font-black flex items-center gap-3"
           >
             Explore Collective
             <span className="group-hover:translate-x-2 transition-transform">
