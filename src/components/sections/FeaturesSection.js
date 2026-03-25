@@ -74,7 +74,7 @@ export default function FeaturesSection() {
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-accent/5 rounded-full blur-[150px] -z-10 translate-x-1/2 -translate-y-1/2" />
       
-      <div className="max-w-7xl mx-auto flex flex-col gap-24">
+      <div className="max-w-7xl mx-auto flex flex-col gap-24 relative z-10">
         <div className="flex flex-col gap-6 max-w-2xl">
           <div className="flex items-center gap-3">
             <span className="h-[1px] w-12 bg-accent" />
