@@ -43,19 +43,31 @@ const features = [
 export default function FeaturesSection() {
   const containerRef = useRef();
 
-  useGSAP(() => {
-    gsap.from(".feature-card", {
-      opacity: 0,
-      y: 100,
-      duration: 1.2,
-      stagger: 0.2,
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top 70%",
-        toggleActions: "play none none reverse",
-      }
-    });
-  }, { scope: containerRef });
+  useGSAP(
+    () => {
+      // Set initial state for all cards
+      gsap.set(".feature-card", {
+        opacity: 0,
+        y: 60,
+      });
+
+      // Animate cards to full visibility when scrolled into view
+      gsap.to(".feature-card", {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        stagger: 0.2,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 80%",
+          toggleActions: "play none none reverse",
+          invalidateOnRefresh: true,
+        },
+      });
+    },
+    { scope: containerRef },
+  );
 
   return (
     <section ref={containerRef} className="relative w-full py-48 bg-black overflow-hidden px-6 md:px-12 lg:px-24">
