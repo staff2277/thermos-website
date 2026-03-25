@@ -14,16 +14,21 @@ export const metadata = {
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import CartSidebar from "@/components/layout/CartSidebar";
+import { AppProvider } from "@/lib/store";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${outfit.variable} antialiased min-h-screen flex flex-col`}>
-        <Navbar />
-        <main className="flex-1 flex flex-col">
-          {children}
-        </main>
-        <Footer />
+        <AppProvider>
+          <Navbar />
+          <CartSidebar />
+          <main className="flex-1 flex flex-col">
+            {children}
+          </main>
+          <Footer />
+        </AppProvider>
       </body>
     </html>
   );
