@@ -1,0 +1,113 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+export default function UnifiedScrollPath({ children }) {
+  const containerRef = useRef(null);
+  const pathRef = useRef(null);
+
+  useEffect(() => {
+    const path = pathRef.current;
+    if (!path) return;
+
+    const length = path.getTotalLength();
+    
+    // Initial setup
+    gsap.set(path, {
+      strokeDasharray: length,
+      strokeDashoffset: length,
+    });
+
+    // Animate path based on scroll of the entire container
+    const trigger = ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top center",
+      end: "bottom center",
+      scrub: 1.5,
+      onUpdate: (self) => {
+        gsap.to(path, {
+          strokeDashoffset: length * (1 - self.progress),
+          duration: 1,
+          ease: "none",
+          overwrite: "auto"
+        });
+      }
+    });
+
+    return () => {
+      trigger.kill();
+    };
+  }, []);
+
+  return (
+    <div ref={containerRef} className="relative w-full bg-black">
+      {/* Unified Background Path */}
+      <div className="absolute inset-0 pointer-events-none z-[1] opacity-100 overflow-hidden mix-blend-screen">
+        <svg
+          viewBox="0 0 1000 6000"
+          className="w-full h-full scale-[1.1]" // Slightly overscale to hide edges
+          preserveAspectRatio="none"
+        >
+          {/* Subtle Glow Layer */}
+          <path
+            d="M 500 0 
+               C 500 400, 850 400, 850 1500 
+               S 150 2600, 150 3000 
+               S 850 3400, 850 4500 
+               S 500 5600, 500 6000"
+            fill="none"
+            stroke="var(--color-accent)"
+            strokeWidth="15"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            vectorEffect="non-scaling-stroke"
+            className="opacity-20 blur-xl"
+          />
+
+          {/* Main Drawing Path */}
+          <path
+            ref={pathRef}
+            d="M 500 0 
+               C 500 400, 850 400, 850 1500 
+               S 150 2600, 150 3000 
+               S 850 3400, 850 4500 
+               S 500 5600, 500 6000"
+            fill="none"
+            stroke="var(--color-accent)"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            vectorEffect="non-scaling-stroke"
+            className="drop-shadow-[0_0_10px_rgba(94,163,88,1)] transition-all duration-300"
+          />
+          
+          <path
+            d="M 500 0 
+               C 500 400, 850 400, 850 1500 
+               S 150 2600, 150 3000 
+               S 850 3400, 850 4500 
+               S 500 5600, 500 6000"
+            fill="none"
+            stroke="white"
+            strokeWidth="0.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            vectorEffect="non-scaling-stroke"
+            className="opacity-10"
+          />
+        </svg>
+      </div>
+
+      {/* Content Layers */}
+      <div className="relative z-10">
+        {children}
+      </div>
+    </div>
+  );
+}

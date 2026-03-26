@@ -102,7 +102,7 @@ export default function ProductShowcaseSection() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full py-20 bg-black overflow-hidden"
+      className="relative w-full py-20 bg-transparent overflow-hidden"
     >
 
       <div className="max-w-[95%] mx-auto px-6 md:px-12 lg:px-24 flex flex-col gap-12 relative z-20">

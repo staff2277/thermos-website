@@ -94,7 +94,7 @@ export default function FeaturesSection() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full py-48 bg-black overflow-hidden px-6 md:px-12 lg:px-24"
+      className="relative w-full py-48 bg-transparent overflow-hidden px-6 md:px-12 lg:px-24"
     >
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-accent/5 rounded-full blur-[150px] -z-10 translate-x-1/2 -translate-y-1/2" />
