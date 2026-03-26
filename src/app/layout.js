@@ -15,18 +15,23 @@ export const metadata = {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CartSidebar from "@/components/layout/CartSidebar";
+import PageTransition from "@/components/layout/PageTransition";
+import ScrollPath from "@/components/layout/ScrollPath";
 import { AppProvider } from "@/lib/store";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${outfit.variable} antialiased min-h-screen flex flex-col`}>
+      <body className={`${outfit.variable} antialiased min-h-screen flex flex-col bg-black`}>
         <AppProvider>
           <Navbar />
           <CartSidebar />
-          <main className="flex-1 flex flex-col">
-            {children}
-          </main>
+          <ScrollPath />
+          <PageTransition>
+            <main className="flex-1 flex flex-col">
+              {children}
+            </main>
+          </PageTransition>
           <Footer />
         </AppProvider>
       </body>

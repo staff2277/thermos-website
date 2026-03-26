@@ -102,29 +102,10 @@ export default function ProductShowcaseSection() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full py-20 bg-black overflow-hidden"
+      className="relative w-full py-20 bg-transparent overflow-hidden"
     >
-      {/* Background SVG Animated Path */}
-      <div className="absolute inset-0 pointer-events-none z-[1] opacity-100">
-        <svg
-          ref={svgRef}
-          viewBox="0 0 1000 5400"
-          className="w-full h-full"
-          preserveAspectRatio="none"
-        >
-          <path
-            ref={pathRef}
-            d="M 500 0 L 500 400 C 850 400, 850 900, 500 900 C 150 900, 150 400, 500 400 L 500 1800 C 850 1800, 850 2300, 500 2300 C 150 2300, 150 1800, 500 1800 L 500 3400 C 850 3400, 850 3900, 500 3900 C 150 3900, 150 3400, 500 3400 L 500 5400"
-            fill="none"
-            stroke="#5EA358"
-            strokeWidth="50"
-            strokeLinecap="round"
-            vectorEffect="non-scaling-stroke"
-            className="filter drop-shadow-[0_0_15px_rgba(94,163,88,0.4)]"
-          />
-        </svg>
-      </div>
-
+      {/* Background SVG Animated Path - Handled globally by ScrollPath */}
+      
       <div className="max-w-[95%] mx-auto px-6 md:px-12 lg:px-24 flex flex-col gap-12 relative z-20">
         <div className="flex flex-col border md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-white/5">
           <div className="flex flex-col gap-4">

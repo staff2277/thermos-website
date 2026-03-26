@@ -103,6 +103,44 @@ export default function ProductPage() {
           </button>
         </div>
       </div>
+
+      {/* Suggested Products */}
+      <div className="mt-48 flex flex-col gap-16">
+        <div className="flex flex-col gap-4">
+           <div className="flex items-center gap-3">
+              <span className="h-[1px] w-8 bg-white/20" />
+              <span className="text-white/40 font-black tracking-widest uppercase text-[10px]">Complete the setup</span>
+           </div>
+           <h2 className="text-4xl font-black tracking-tighter uppercase">Suggested Vessels</h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+           {products.filter(p => p.id !== product.id).slice(0, 3).map(suggested => (
+              <Link 
+                key={suggested.id} 
+                href={`/product/${suggested.id}`}
+                className="group flex flex-col gap-6"
+              >
+                 <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden bg-neutral-950 border border-white/5 shadow-xl transition-all duration-500 group-hover:border-accent/40">
+                    <Image 
+                      src={suggested.image} 
+                      alt={suggested.name} 
+                      fill 
+                      className="object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-[1000ms] group-hover:scale-110" 
+                    />
+                 </div>
+                 <div className="flex justify-between items-end px-2">
+                    <div className="flex flex-col gap-1">
+                       <h4 className="text-xl font-bold tracking-tight group-hover:text-accent transition-colors">{suggested.name}</h4>
+                       <span className="text-[10px] font-black uppercase tracking-widest text-white/30">{suggested.category}</span>
+                    </div>
+                    <span className="font-black text-white">{suggested.price}</span>
+                 </div>
+              </Link>
+           ))}
+        </div>
+      </div>
     </main>
+
   );
 }

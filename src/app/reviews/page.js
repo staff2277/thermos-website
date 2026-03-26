@@ -4,7 +4,8 @@ import { useState, useRef } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { reviews } from "@/data/reviews";
+import { reviews as initialReviews } from "@/data/reviews";
+import { useAppStore } from "@/lib/store";
 
 const Star = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-accent">
@@ -22,12 +23,47 @@ const VerifiedBadge = () => (
 );
 
 export default function ReviewsPage() {
+  const { user } = useAppStore();
+  const [reviews, setReviews] = useState(initialReviews);
   const [filter, setFilter] = useState(5);
   const containerRef = useRef();
+
+  const [newReview, setNewReview] = useState({
+    rating: 5,
+    product: "Legacy Pro",
+    content: ""
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const filteredReviews = filter === "All" 
     ? reviews 
     : reviews.filter(r => r.rating === filter);
+
+  const handleSubmitReview = (e) => {
+    e.preventDefault();
+    if (!user) return;
+    
+    setIsSubmitting(true);
+    // Simulate API delay
+    setTimeout(() => {
+      const reviewToAdd = {
+        id: Date.now(),
+        author: user.name,
+        location: "Verified Community Member",
+        rating: newReview.rating,
+        product: newReview.product,
+        content: newReview.content,
+        date: new Date().toLocaleDateString('en-GB').replace(/\//g, '.')
+      };
+      
+      setReviews([reviewToAdd, ...reviews]);
+      setNewReview({ rating: 5, product: "Legacy Pro", content: "" });
+      setIsSubmitting(false);
+      
+      // Scroll to top of grid
+      window.scrollTo({ top: 400, behavior: 'smooth' });
+    }, 1500);
+  };
 
   useGSAP(() => {
     // Continuous gradient animation
@@ -142,6 +178,102 @@ export default function ReviewsPage() {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Write a Review Section */}
+      <div className="mt-32 border-t border-white/5 pt-24 max-w-4xl mx-auto w-full">
+         <div className="flex flex-col gap-12">
+            <div className="flex flex-col gap-4 text-center">
+               <h2 className="text-4xl font-black tracking-tight uppercase">Share Your Experience.</h2>
+               <p className="text-white/40 font-medium">Your feedback drives our engineering.</p>
+            </div>
+
+            {user ? (
+               <form 
+                 onSubmit={handleSubmitReview}
+                 className="p-10 md:p-14 bg-white/5 border border-white/10 rounded-[3rem] backdrop-blur-3xl flex flex-col gap-10"
+               >
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div className="flex flex-col gap-3">
+                       <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-4">Vessel Selection</label>
+                       <select 
+                         className="bg-white/5 border border-white/10 rounded-full px-8 py-4 text-xs font-black uppercase tracking-widest text-white/60 focus:outline-none focus:border-accent/40 appearance-none cursor-pointer"
+                         value={newReview.product}
+                         onChange={(e) => setNewReview({...newReview, product: e.target.value})}
+                       >
+                         <option value="Legacy Pro">Legacy Pro</option>
+                         <option value="Stealth Flask">Stealth Flask</option>
+                         <option value="Summit series">Summit series</option>
+                         <option value="Titan Edition">Titan Edition</option>
+                       </select>
+                    </div>
+
+                    <div className="flex flex-col gap-3">
+                       <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-4">Star Rating</label>
+                       <div className="flex gap-3 px-4">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                             <button
+                               type="button"
+                               key={star}
+                               onClick={() => setNewReview({...newReview, rating: star})}
+                               className={`transition-all ${newReview.rating >= star ? 'text-accent scale-110' : 'text-white/10 hover:text-white/20'}`}
+                             >
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                   <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                             </button>
+                          ))}
+                       </div>
+                    </div>
+                 </div>
+
+                 <div className="flex flex-col gap-3">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-4">Your Commentary</label>
+                    <textarea 
+                      required
+                      rows="4"
+                      placeholder="Transmission your performance feedback..."
+                      className="bg-white/5 border border-white/10 rounded-[2rem] px-8 py-6 text-sm focus:outline-none focus:border-accent/40 transition-all hover:bg-white/10 resize-none font-medium text-white/80"
+                      value={newReview.content}
+                      onChange={(e) => setNewReview({...newReview, content: e.target.value})}
+                    />
+                 </div>
+
+                 <button 
+                   type="submit"
+                   disabled={isSubmitting}
+                   className="w-full py-5 bg-accent text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-full hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3 relative overflow-hidden"
+                 >
+                   {isSubmitting ? (
+                     <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                   ) : (
+                     <>
+                       Submit Transmission
+                       <span className="opacity-40">&rarr;</span>
+                     </>
+                   )}
+                 </button>
+               </form>
+            ) : (
+               <div className="p-16 bg-white/5 border border-white/10 border-dashed rounded-[3rem] flex flex-col items-center gap-8 text-center animate-pulse">
+                  <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center text-white/20">
+                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M12 2H2v10h10V2zM22 2h-10v10h10V2zM12 12H2v10h10V12zM22 12h-10v10h10V12z" />
+                     </svg>
+                  </div>
+                  <div className="flex flex-col gap-4">
+                     <h3 className="text-xl font-bold tracking-tight">Identity Authentication Required.</h3>
+                     <p className="text-white/30 font-medium max-w-sm">Only verified community members can share technical experience data.</p>
+                  </div>
+                  <Link 
+                    href="/sign-in" 
+                    className="px-10 py-4 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-full hover:scale-105 transition-all"
+                  >
+                    Authenticate Now
+                  </Link>
+               </div>
+            )}
+         </div>
       </div>
 
       {/* CTA Bottom */}
