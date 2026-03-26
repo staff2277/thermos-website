@@ -102,10 +102,9 @@ export default function ProductShowcaseSection() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full py-20 bg-transparent overflow-hidden"
+      className="relative w-full py-20 bg-black overflow-hidden"
     >
-      {/* Background SVG Animated Path - Handled globally by ScrollPath */}
-      
+
       <div className="max-w-[95%] mx-auto px-6 md:px-12 lg:px-24 flex flex-col gap-12 relative z-20">
         <div className="flex flex-col border md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-white/5">
           <div className="flex flex-col gap-4">

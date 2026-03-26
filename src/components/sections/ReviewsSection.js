@@ -76,7 +76,7 @@ export default function ReviewsSection() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full min-h-screen bg-transparent overflow-hidden flex flex-col justify-center py-24 md:py-32"
+      className="relative w-full min-h-screen bg-black overflow-hidden flex flex-col justify-center py-24 md:py-32"
     >
       <div className="max-w-[95%] mx-auto px-6 md:px-12 lg:px-24 mb-20 flex flex-col gap-6">
         <div className="flex items-center gap-3">

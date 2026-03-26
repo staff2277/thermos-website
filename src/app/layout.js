@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
         <AppProvider>
           <Navbar />
           <CartSidebar />
-          <ScrollPath />
+          {/* <ScrollPath /> */}
           <PageTransition>
             <main className="flex-1 flex flex-col">
               {children}

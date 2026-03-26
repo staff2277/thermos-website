@@ -289,7 +289,7 @@ export default function HeroSection() {
   );
 
   return (
-    <section ref={containerRef} className="relative w-full bg-transparent">
+    <section ref={containerRef} className="relative w-full bg-black">
       {/* 3D Canvas Background */}
       <div className="sticky top-0 h-screen w-full z-0">
         <Canvas shadows dpr={[1, 2]}>

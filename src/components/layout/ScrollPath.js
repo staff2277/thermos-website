@@ -15,36 +15,31 @@ export default function ScrollPath() {
   const pathname = usePathname();
 
   useEffect(() => {
+    // We only want the path on certain pages (Home/Shop etc.) 
+    // and specifically NOT the hero section (which we'll handle by positioning)
+    
     const path = pathRef.current;
     if (!path) return;
 
+    // Length of the path
     const pathLength = path.getTotalLength();
     
     gsap.set(path, {
       strokeDasharray: pathLength,
       strokeDashoffset: pathLength,
-      opacity: 0
     });
 
-    // Fade in path only after hero
-    gsap.to(path, {
-      opacity: 0.4,
-      scrollTrigger: {
-        trigger: "body",
-        start: "100vh top",
-        toggleActions: "play none none reverse"
-      }
-    });
-
-    // Drawing with weighted 'rope' feel
     const trigger = ScrollTrigger.create({
       trigger: "body",
-      start: "100vh top",
+      start: "top top",
       end: "bottom bottom",
-      scrub: 3.5, // Much slower, 'weighted' feel
+      scrub: 2.5, // Slow, weighted progress for 'rope' feel
       onUpdate: (self) => {
+        const progress = self.progress;
+        // Draw the path as the user scrolls
         gsap.to(path, {
-          strokeDashoffset: pathLength * (1 - self.progress),
+          strokeDashoffset: pathLength * (1 - progress),
+          duration: 1.5,
           ease: "power2.out",
           overwrite: "auto"
         });
@@ -57,33 +52,41 @@ export default function ScrollPath() {
   }, [pathname]);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-[2] overflow-hidden mix-blend-screen overflow-visible">
+    <div className="fixed inset-0 pointer-events-none z-[-1] opacity-[0.15] overflow-hidden mix-blend-screen">
       <svg 
-        ref={svgRef} 
-        width="100%" 
-        height="100%" 
-        viewBox="0 0 1000 15000" 
-        preserveAspectRatio="xMidYMin slice"
+        ref={svgRef}
+        className="w-full h-[300vh] translate-y-[100vh]" // Offset so it starts AFTER the hero (100vh)
+        viewBox="0 0 1000 3000" 
+        preserveAspectRatio="xMidYMin meet"
         fill="none" 
-        className="blur-[2px]"
+        xmlns="http://www.w3.org/2000/svg"
       >
         <path
           ref={pathRef}
           d="M 500 0 
-             C 800 500, 200 1000, 500 1500 
-             S 800 2500, 500 3000 
-             S 200 4000, 500 4500 
-             S 800 6000, 500 6500 
-             S 200 8000, 500 8500 
-             S 800 10500, 500 11000 
-             S 200 13000, 500 13500 
-             S 800 14500, 500 15000"
+             C 700 300 300 600 500 900 
+             S 700 1500 400 1800 
+             S 600 2400 500 3000"
           stroke="var(--color-accent)"
-          strokeWidth="45"
+          strokeWidth="6"
           strokeLinecap="round"
           strokeLinejoin="round"
           style={{ vectorEffect: 'non-scaling-stroke' }}
-          className="filter drop-shadow-[0_0_20px_rgba(94,163,88,0.5)]"
+          className="transition-all duration-300"
+        />
+        
+        {/* Shadow layer for the rope depth */}
+        <path
+          d="M 500 0 
+             C 700 300 300 600 500 900 
+             S 700 1500 400 1800 
+             S 600 2400 500 3000"
+          stroke="var(--color-accent)"
+          strokeWidth="15"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={{ vectorEffect: 'non-scaling-stroke' }}
+          className="opacity-10 blur-md translate-x-1 translate-y-2"
         />
       </svg>
     </div>
