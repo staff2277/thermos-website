@@ -17,7 +17,7 @@ export default function UnifiedScrollPath({ children }) {
     if (!path) return;
 
     const length = path.getTotalLength();
-    
+
     // Initial setup
     gsap.set(path, {
       strokeDasharray: length,
@@ -33,11 +33,10 @@ export default function UnifiedScrollPath({ children }) {
       onUpdate: (self) => {
         gsap.to(path, {
           strokeDashoffset: length * (1 - self.progress),
-          duration: 1,
           ease: "none",
-          overwrite: "auto"
+          overwrite: "auto",
         });
-      }
+      },
     });
 
     return () => {
@@ -63,11 +62,11 @@ export default function UnifiedScrollPath({ children }) {
                S 500 5600, 500 6000"
             fill="none"
             stroke="var(--color-accent)"
-            strokeWidth="15"
+            strokeWidth="50"
             strokeLinecap="round"
             strokeLinejoin="round"
             vectorEffect="non-scaling-stroke"
-            className="opacity-20 blur-xl"
+            className="opacity-20 blur-2xl"
           />
 
           {/* Main Drawing Path */}
@@ -80,13 +79,13 @@ export default function UnifiedScrollPath({ children }) {
                S 500 5600, 500 6000"
             fill="none"
             stroke="var(--color-accent)"
-            strokeWidth="3"
+            strokeWidth="30"
             strokeLinecap="round"
             strokeLinejoin="round"
             vectorEffect="non-scaling-stroke"
-            className="drop-shadow-[0_0_10px_rgba(94,163,88,1)] transition-all duration-300"
+            className="drop-shadow-[0_0_15px_rgba(94,163,88,0.8)] transition-all duration-300"
           />
-          
+
           <path
             d="M 500 0 
                C 500 400, 850 400, 850 1500 
@@ -95,19 +94,17 @@ export default function UnifiedScrollPath({ children }) {
                S 500 5600, 500 6000"
             fill="none"
             stroke="white"
-            strokeWidth="0.5"
+            strokeWidth="1"
             strokeLinecap="round"
             strokeLinejoin="round"
             vectorEffect="non-scaling-stroke"
-            className="opacity-10"
+            className="opacity-20 translate-y-[-1px]"
           />
         </svg>
       </div>
 
       {/* Content Layers */}
-      <div className="relative z-10">
-        {children}
-      </div>
+      <div className="relative z-10">{children}</div>
     </div>
   );
 }
