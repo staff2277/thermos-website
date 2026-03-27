@@ -400,6 +400,15 @@ export default function HeroSection() {
               our thermos keeps your beverages at the perfect temperature all
               day long. Stay powered from morning commute to evening workout.
             </p>
+            
+            <div className="flex flex-wrap gap-5 mt-2 animate-item-2">
+              <Link
+                href="/battery"
+                className="group relative px-10 py-5 bg-white/10 backdrop-blur-md border border-white/20 text-white text-outfit-14 font-bold rounded-full hover:bg-white/20 transition-all duration-300 active:scale-95"
+              >
+                Discover Resilience
+              </Link>
+            </div>
           </div>
         </div>
 
