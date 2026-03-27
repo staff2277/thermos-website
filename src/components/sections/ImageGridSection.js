@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -10,53 +10,55 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
 
-const gridItems = [
-  { url: "/images/grid/grid-1.jpg", span: "grid-item col-span-2 row-span-2", curve: "rounded-[4rem] rounded-tr-[12rem] rounded-bl-[8rem]" },
-  { url: "/images/grid/grid-2.png", span: "grid-item col-span-1 row-span-1", curve: "rounded-[6rem] rounded-tl-[2rem]" },
-  { url: "/images/grid/grid-3.jfif", span: "grid-item col-span-1 row-span-2", curve: "rounded-full aspect-[2/3]" },
-  { url: "/images/grid/grid-4.png", span: "grid-item col-span-1 row-span-1", curve: "rounded-[3rem] rounded-br-[10rem]" },
-  { url: "/images/grid/grid-5.png", span: "grid-item col-span-2 row-span-1", curve: "rounded-[10rem] rounded-tl-[10rem] rounded-br-[8rem]" },
-  { url: "/images/grid/grid-6.png", span: "grid-item col-span-1 row-span-1", curve: "rounded-[6rem] rounded-tr-[2rem]" },
-  { url: "/images/grid/grid-7.jpg", span: "grid-item col-span-1 row-span-1", curve: "rounded-[2rem] rounded-bl-[10rem]" },
-  { url: "/images/grid/grid-8.png", span: "grid-item col-span-2 row-span-2", curve: "rounded-[10rem] rounded-tl-[4rem] rounded-br-[16rem]" },
-  { url: "/images/grid/grid-9.png", span: "grid-item col-span-1 row-span-1", curve: "rounded-full" },
-  { url: "/images/grid/grid-10.png", span: "grid-item col-span-1 row-span-1", curve: "rounded-[6rem] rounded-tr-[4rem]" },
-  { url: "/images/grid/grid-11.png", span: "grid-item col-span-2 row-span-1", curve: "rounded-tl-[12rem] rounded-tr-[4rem] rounded-br-[10rem] rounded-bl-[2rem]" },
+const allImages = [
+  "/images/grid/grid-1.jpg",
+  "/images/grid/grid-2.png",
+  "/images/grid/grid-3.jfif",
+  "/images/grid/grid-4.png",
+  "/images/grid/grid-5.png",
+  "/images/grid/grid-6.png",
+  "/images/grid/grid-7.jpg",
+  "/images/grid/grid-8.png",
+  "/images/grid/grid-9.png",
+  "/images/grid/grid-10.png",
+  "/images/grid/grid-11.png",
 ];
 
 export default function ImageGridSection() {
   const containerRef = useRef();
+  const [visibleImages, setVisibleImages] = useState(allImages.slice(0, 5));
   
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setVisibleImages(prev => {
+        const next = [...prev];
+        const slotToReplace = Math.floor(Math.random() * 5);
+        const availablePool = allImages.filter(img => !prev.includes(img));
+        
+        if (availablePool.length > 0) {
+          const newImg = availablePool[Math.floor(Math.random() * availablePool.length)];
+          next[slotToReplace] = newImg;
+        }
+        
+        return next;
+      });
+    }, 1000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
   useGSAP(() => {
-    // Reveal animation
     gsap.from(".grid-item", {
       opacity: 0,
       scale: 0.9,
-      y: 100,
-      stagger: {
-        amount: 0.8,
-        grid: [4, 3],
-        from: "start"
-      },
-      duration: 1.5,
-      ease: "power4.out",
+      y: 50,
+      stagger: 0.1,
+      duration: 1,
+      ease: "power3.out",
       scrollTrigger: {
         trigger: containerRef.current,
         start: "top 75%",
-        end: "bottom center",
         toggleActions: "play none none reverse",
-      }
-    });
-
-    // Parallax effect on grid items
-    gsap.to(".grid-item-inner-content", {
-      y: (i) => (i % 2 === 0 ? -40 : 40),
-      ease: "none",
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: 1,
       }
     });
   }, { scope: containerRef });
@@ -64,57 +66,97 @@ export default function ImageGridSection() {
   return (
     <section 
       ref={containerRef} 
-      className="relative w-full py-48 px-6 md:px-12 lg:px-24 bg-transparent z-10"
+      className="relative w-full h-screen px-6 md:px-12 lg:px-24 bg-transparent z-10 flex flex-col justify-center overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto flex flex-col gap-24 font-outfit">
-        <div className="flex flex-col gap-6 max-w-2xl relative">
+      <div className="max-w-7xl mx-auto w-full flex flex-col gap-12 font-outfit">
+        <div className="flex flex-col gap-4 max-w-2xl">
           <div className="flex items-center gap-3">
             <span className="h-[1px] w-12 bg-accent opacity-50" />
             <span className="text-accent font-bold tracking-[0.4em] uppercase text-xs">
-              Visual Narrative
+              Live Feed
             </span>
           </div>
-          <h2 className="text-6xl md:text-7xl font-black tracking-tighter leading-tight text-white mb-4 uppercase">
-            DESIGNED FOR <br />
-            <span className="text-accent italic">IMPACT.</span>
+          <h2 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-tight text-white uppercase italic">
+            DYNAMIC <span className="text-accent underline decoration-white/10 underline-offset-8">FLUX.</span>
           </h2>
-          <p className="text-white/40 max-w-lg font-medium leading-relaxed">
-            The intersection of high-performance engineering and street aesthetics. 
-            Every curve, every finish, meticulously crafted for those who refuse to settle.
+          <p className="text-white/40 max-w-md font-bold uppercase tracking-widest text-[10px]">
+             Real-time aesthetic synchronization // Community Spotlight
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 auto-rows-[250px] md:auto-rows-[400px]">
-          {gridItems.map((item, idx) => (
-            <div 
-              key={idx} 
-              className={`grid-item relative overflow-hidden group/item ${item.span} ${item.curve} shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/5 bg-neutral-900/50`}
-            >
-              <div className="grid-item-inner-content w-full h-full relative overflow-hidden">
-                 <Image 
-                    src={item.url}
-                    alt={`Grid Item ${idx + 1}`}
-                    fill
-                    className="object-cover transition-all duration-[1200ms] ease-out group-hover/item:scale-110 grayscale-[40%] group-hover/item:grayscale-0"
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                 />
-                
-                {/* Floating label on hover */}
-                <div className="absolute bottom-8 left-8 opacity-0 group-hover/item:opacity-100 transition-all duration-700 translate-y-4 group-hover/item:translate-y-0 pointer-events-none z-20">
-                   <div className="px-6 py-2 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full">
-                      <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Thermos // {idx + 1}</span>
-                   </div>
-                </div>
+        {/* Regular Mosaic Grid: 3 columns, 2 rows */}
+        <div className="grid grid-cols-1 md:grid-cols-3 grid-rows-4 md:grid-rows-2 gap-4 h-[50vh] md:h-[60vh] w-full">
+          {/* Big Item */}
+          <div className="grid-item relative overflow-hidden rounded-3xl border border-white/5 bg-neutral-900 col-span-1 md:col-span-1 md:row-span-2 group">
+              <Image 
+                key={visibleImages[0]}
+                src={visibleImages[0]}
+                alt="Feed 1"
+                fill
+                className="object-cover animate-swap-fade scale-105 group-hover:scale-110 transition-transform duration-700"
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+          </div>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity duration-700 pointer-events-none z-10" />
-              </div>
-            </div>
-          ))}
+          <div className="grid-item relative overflow-hidden rounded-3xl border border-white/5 bg-neutral-900 col-span-1 md:col-span-1 row-span-1 group">
+              <Image 
+                key={visibleImages[1]}
+                src={visibleImages[1]}
+                alt="Feed 2"
+                fill
+                className="object-cover animate-swap-fade group-hover:scale-110 transition-transform duration-700"
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+          </div>
+
+          <div className="grid-item relative overflow-hidden rounded-3xl border border-white/5 bg-neutral-900 col-span-1 md:col-span-1 row-span-1 group">
+              <Image 
+                key={visibleImages[2]}
+                src={visibleImages[2]}
+                alt="Feed 3"
+                fill
+                className="object-cover animate-swap-fade group-hover:scale-110 transition-transform duration-700"
+                sizes="(max-width: 768px) 25vw, 33vw"
+              />
+          </div>
+
+          <div className="grid-item relative overflow-hidden rounded-3xl border border-white/5 bg-neutral-900 col-span-1 md:col-span-1 row-span-1 group">
+              <Image 
+                key={visibleImages[3]}
+                src={visibleImages[3]}
+                alt="Feed 4"
+                fill
+                className="object-cover animate-swap-fade group-hover:scale-110 transition-transform duration-700"
+                sizes="(max-width: 768px) 25vw, 33vw"
+              />
+          </div>
+
+          <div className="grid-item relative overflow-hidden rounded-3xl border border-white/5 bg-neutral-900 col-span-1 md:col-span-1 row-span-1 group">
+              <Image 
+                key={visibleImages[4]}
+                src={visibleImages[4]}
+                alt="Feed 5"
+                fill
+                className="object-cover animate-swap-fade group-hover:scale-110 transition-transform duration-700"
+                sizes="(max-width: 768px) 25vw, 33vw"
+              />
+          </div>
         </div>
       </div>
       
       {/* Background Decorative Element */}
       <div className="absolute top-1/2 left-0 w-[800px] h-[800px] bg-accent/5 rounded-full blur-[200px] -z-10 -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+      
+      <style jsx global>{`
+        @keyframes swapFade {
+          0% { opacity: 0.5; filter: blur(4px) scale(1.1); transform: translateY(10px); }
+          100% { opacity: 1; filter: blur(0px) scale(1); transform: translateY(0px); }
+        }
+        .animate-swap-fade {
+          animation: swapFade 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+      `}</style>
     </section>
   );
 }
