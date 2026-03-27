@@ -39,6 +39,15 @@ const WaveMaterial = {
       uv.x += wave;
       
       vec4 color = texture2D(uTexture, uv);
+      
+      // If texture is not loaded or transparent, show a stylish placeholder
+      if (color.a < 0.01) {
+        color = vec4(0.1, 0.1, 0.1, 1.0);
+        // Add some "loading" noise or pattern
+        float pattern = sin(vUv.x * 100.0) * sin(vUv.y * 100.0);
+        color.rgb += pattern * 0.02;
+      }
+      
       gl_FragColor = color;
     }
   `,
@@ -49,27 +58,41 @@ function WaveImage({ url, aspect = 1 }) {
   const [hovered, setHover] = useState(false);
   const hoverVal = useRef(0);
   
-  const material = useMemo(() => {
-    return new THREE.ShaderMaterial({
-      uniforms: THREE.UniformsUtils.clone(WaveMaterial.uniforms),
-      vertexShader: WaveMaterial.vertexShader,
-      fragmentShader: WaveMaterial.fragmentShader,
-    });
-  }, []);
-
   const texture = useLoader(THREE.TextureLoader, url);
   
+  const material = useMemo(() => {
+    if (!texture) return null;
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    
+    return new THREE.ShaderMaterial({
+      uniforms: {
+        uTexture: { value: texture },
+        uTime: { value: 0 },
+        uHover: { value: 0 },
+      },
+      vertexShader: WaveMaterial.vertexShader,
+      fragmentShader: WaveMaterial.fragmentShader,
+      transparent: true,
+      depthTest: true,
+      depthWrite: true,
+    });
+  }, [texture]);
+
   useFrame((state, delta) => {
+    if (!material) return;
     const targetHover = hovered ? 1 : 0;
-    hoverVal.current = THREE.MathUtils.lerp(hoverVal.current, targetHover, delta * 10);
+    hoverVal.current = THREE.MathUtils.lerp(hoverVal.current, targetHover, delta * 12);
     
     material.uniforms.uTime.value = state.clock.getElapsedTime();
     material.uniforms.uHover.value = hoverVal.current;
-    material.uniforms.uTexture.value = texture;
   });
 
   // Calculate plane size based on aspect ratio
-  const scale = [aspect > 1 ? 2 * aspect : 2, aspect < 1 ? 2 / aspect : 2, 1];
+  // We want the image to fill the canvas area while maintaining aspect ratio
+  const s = 4.0;
+  const scale = [aspect > 1 ? s * aspect : s, aspect < 1 ? s / aspect : s, 1];
 
   return (
     <mesh 
@@ -102,16 +125,21 @@ export default function ImageGridSection() {
   const containerRef = useRef();
   
   useGSAP(() => {
+    // Reveal animation
     gsap.from(".grid-item", {
       opacity: 0,
-      scale: 0.8,
+      scale: 0.9,
       y: 100,
-      stagger: 0.1,
+      stagger: {
+        amount: 0.8,
+        grid: [4, 3],
+        from: "start"
+      },
       duration: 1.5,
       ease: "power4.out",
       scrollTrigger: {
         trigger: containerRef.current,
-        start: "top 70%",
+        start: "top 75%",
         end: "bottom center",
         toggleActions: "play none none reverse",
       }
@@ -119,57 +147,78 @@ export default function ImageGridSection() {
 
     // Parallax effect on grid items
     gsap.to(".grid-item-inner", {
-      y: (i) => (i % 2 === 0 ? -40 : 40),
+      y: (i) => (i % 2 === 0 ? -60 : 60),
       ease: "none",
       scrollTrigger: {
         trigger: containerRef.current,
         start: "top bottom",
         end: "bottom top",
-        scrub: true,
+        scrub: 1,
       }
     });
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="relative w-full py-32 px-6 md:px-12 lg:px-24 bg-transparent z-10">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-20">
-          <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-4">
-            CRAFTED FOR <span className="text-accent">EVERY JOURNEY</span>
+    <section 
+      ref={containerRef} 
+      className="relative w-full py-48 px-6 md:px-12 lg:px-24 bg-transparent z-10"
+    >
+      <div className="max-w-7xl mx-auto flex flex-col gap-24">
+        <div className="flex flex-col gap-6 max-w-2xl relative">
+          <div className="flex items-center gap-3">
+            <span className="h-[1px] w-12 bg-accent opacity-50" />
+            <span className="text-accent font-bold tracking-[0.4em] uppercase text-xs">
+              Visual Narrative
+            </span>
+          </div>
+          <h2 className="text-6xl md:text-7xl font-black tracking-tighter leading-tight text-white mb-4">
+            DESIGNED FOR <br />
+            <span className="text-accent italic">IMPACT.</span>
           </h2>
-          <p className="text-white/40 max-w-xl font-medium">
-            Explore the Thermos collection through the lens of our global community. Premium design meets everyday utility.
+          <p className="text-white/40 max-w-lg font-medium leading-relaxed">
+            The intersection of high-performance engineering and street aesthetics. 
+            Every curve, every finish, meticulously crafted for those who refuse to settle.
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 auto-rows-[250px] md:auto-rows-[300px]">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 auto-rows-[250px] md:auto-rows-[400px]">
           {gridItems.map((item, idx) => (
             <div 
               key={idx} 
-              className={`grid-item relative overflow-hidden group ${item.span} ${item.curve}`}
+              className={`grid-item relative overflow-hidden group/item ${item.span} ${item.curve} shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/5 bg-neutral-900`}
             >
-              <div className="grid-item-inner w-full h-full relative cursor-pointer">
-                {/* We'll use a single Canvas or just regular images for now to ensure performance 
-                    but the "wave" is specifically requested. Let's use R3F View for premium feel if possible, 
-                    otherwise simple CSS hover with filter is safer for huge grids. 
-                    Given the request for "custom look" and "wave texture", I'll use a Canvas per item 
-                    but keep it optimized. */}
-                <Canvas 
-                  className="w-full h-full"
-                  camera={{ position: [0, 0, 1.5], fov: 45 }}
-                  gl={{ antialias: true, alpha: true }}
-                >
-                  <ambientLight intensity={1.5} />
-                  <WaveImage url={item.url} position={[0, 0, 0]} scale={[2.5, 2.5, 1]} />
-                </Canvas>
+              <div className="grid-item-inner w-full h-full relative cursor-none">
+                <Suspense fallback={
+                  <div className="w-full h-full bg-white/5 animate-pulse flex items-center justify-center">
+                    <div className="w-8 h-8 border-2 border-accent/20 border-t-accent rounded-full animate-spin" />
+                  </div>
+                }>
+                  <Canvas 
+                    className="w-full h-full pointer-events-auto"
+                    camera={{ position: [0, 0, 4], fov: 45 }}
+                    gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+                    dpr={[1, 2]}
+                  >
+                    <WaveImage url={item.url} aspect={item.aspect} />
+                  </Canvas>
+                </Suspense>
                 
-                {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                {/* Floating label on hover */}
+                <div className="absolute bottom-10 left-10 opacity-0 group-hover/item:opacity-100 transition-all duration-700 translate-y-4 group-hover/item:translate-y-0 pointer-events-none z-20">
+                   <div className="px-6 py-2 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full">
+                      <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Thermos // {idx + 1}</span>
+                   </div>
+                </div>
+
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity duration-700 pointer-events-none z-10" />
               </div>
             </div>
           ))}
         </div>
       </div>
+      
+      {/* Background Decorative Element */}
+      <div className="absolute top-1/2 left-0 w-[800px] h-[800px] bg-accent/5 rounded-full blur-[200px] -z-10 -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
     </section>
   );
 }

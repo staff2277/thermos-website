@@ -1,6 +1,7 @@
 import HeroSection from "@/components/sections/HeroSection";
 import ProductShowcaseSection from "@/components/sections/ProductShowcaseSection";
 import FeaturesSection from "@/components/sections/FeaturesSection";
+import ImageGridSection from "@/components/sections/ImageGridSection";
 import ReviewsSection from "@/components/sections/ReviewsSection";
 import UnifiedScrollPath from "@/components/layout/UnifiedScrollPath";
 
@@ -11,6 +12,7 @@ export default function Home() {
       
       <UnifiedScrollPath>
         <FeaturesSection />
+        <ImageGridSection />
         <ProductShowcaseSection />
         <ReviewsSection />
       </UnifiedScrollPath>
