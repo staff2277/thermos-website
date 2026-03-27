@@ -83,18 +83,18 @@ export default function Footer() {
             </h4>
             <div className="flex flex-col gap-3">
               {[
-                "Our Story",
-                "Research & Tech",
-                "Sustainability",
-                "Community",
-                "Journal",
+                { name: "Our Story", path: "/discover" },
+                { name: "Research & Tech", path: "/tech" },
+                { name: "Sustainability", path: "/sustainability" },
+                { name: "Community", path: "/community" },
+                { name: "Journal", path: "/journal" },
               ].map((item) => (
                 <Link
-                  key={item}
-                  href="#"
+                  key={item.name}
+                  href={item.path}
                   className="text-white/50 hover:text-white transition-colors font-medium"
                 >
-                  {item}
+                  {item.name}
                 </Link>
               ))}
             </div>
@@ -126,13 +126,13 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-white/5 pt-12 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex gap-8 text-[10px] font-black uppercase tracking-widest text-white/20">
-            <Link href="#" className="hover:text-accent transition-colors">
+            <Link href="/privacy" className="hover:text-accent transition-colors">
               Privacy Policy
             </Link>
-            <Link href="#" className="hover:text-accent transition-colors">
+            <Link href="/terms" className="hover:text-accent transition-colors">
               Terms of Service
             </Link>
-            <Link href="#" className="hover:text-accent transition-colors">
+            <Link href="/cookies" className="hover:text-accent transition-colors">
               Cookie Settings
             </Link>
           </div>
