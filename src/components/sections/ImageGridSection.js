@@ -24,9 +24,6 @@ const allImages = [
   { src: "/images/grid/grid-9.png", portrait: true, aspect: 0.67 },
   { src: "/images/grid/grid-10.png", portrait: true, aspect: 0.8 },
   { src: "/images/grid/grid-11.png", portrait: true, aspect: 0.8 },
-  { src: "/images/grid/grid-12.jfif", portrait: true, aspect: 0.8 },
-  { src: "/images/grid/grid-13.jfif", portrait: true, aspect: 0.61 },
-  { src: "/images/grid/grid-14.jfif", portrait: true, aspect: 0.66 },
   { src: "/images/grid/grid-15.jpg", portrait: true, aspect: 0.79 },
 ];
 
@@ -68,7 +65,9 @@ function FlippableImage({ item, alt, ...props }) {
             fill
             {...props}
             priority={true}
+            quality={95}
             className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         </div>
         
@@ -83,7 +82,9 @@ function FlippableImage({ item, alt, ...props }) {
             fill
             {...props}
             priority={true}
+            quality={95}
             className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         </div>
       </div>
@@ -173,13 +174,12 @@ export default function ImageGridSection() {
                 className="grid-item relative overflow-visible rounded-[2rem] md:rounded-[3rem] border border-white/5 bg-neutral-900 shadow-2xl transition-all duration-[1200ms] ease-in-out"
                 style={{ 
                   flex: `${item.aspect}`,
-                  minWidth: item.portrait ? "150px" : "250px"
+                  minWidth: item.portrait ? "180px" : "300px"
                 }}
              >
                  <FlippableImage 
                     item={item}
                     alt={`Dynamic Item ${idx + 1}`}
-                    sizes="(max-width: 768px) 50vw, 20vw"
                  />
                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none rounded-[2rem] md:rounded-[3rem] z-20" />
              </div>
