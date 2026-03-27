@@ -23,6 +23,7 @@ export default function RegisterPage() {
     // Mock registration delay
     setTimeout(() => {
       login({
+        id: `PIONEER-${Date.now()}`,
         name: formData.name,
         email: formData.email,
         role: "pioneer"

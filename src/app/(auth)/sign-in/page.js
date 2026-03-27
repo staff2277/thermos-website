@@ -17,6 +17,7 @@ export default function SignInPage() {
     e.preventDefault();
     // In a real app, this would be an API call to /api/auth/login
     login({
+      id: "ALEX-40292-X",
       name: "Alex Marcus",
       email: formData.email,
       role: "pioneer"

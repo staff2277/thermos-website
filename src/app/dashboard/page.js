@@ -102,17 +102,17 @@ export default function DashboardPage() {
                   <circle cx="50" cy="50" r="48" fill="none" stroke="var(--color-accent)" strokeWidth="2" strokeDasharray="100 200" className="drop-shadow-[0_0_10px_rgba(94,163,88,1)]" />
                </svg>
                <div className="absolute inset-2 rounded-full bg-neutral-950 border border-white/10 flex items-center justify-center text-5xl md:text-6xl font-black text-white shadow-inner">
-                 {user.name[0].toUpperCase()}
+                 {user?.name?.[0]?.toUpperCase() || "T"}
                </div>
              </div>
              
              <div className="flex flex-col gap-4 justify-center h-full pt-2">
                <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
                  <span className="px-4 py-1.5 bg-accent/10 border border-accent/20 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-accent">
-                   {user.role} Status
+                   {user?.role || "Pioneer"} Status
                  </span>
                  <span className="text-white/30 text-[10px] font-black uppercase tracking-[0.2em]">
-                   ID: {user.id.split("-")[0]}
+                   ID: {user?.id?.split("-")[0] || "USER"}
                  </span>
                </div>
                
