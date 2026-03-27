@@ -66,9 +66,9 @@ function FlippableImage({ item, alt, ...props }) {
             fill
             {...props}
             priority={true}
-            quality={95}
+            unoptimized={true}
             className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            style={{ filter: "contrast(1.02) brightness(1.02)" }}
           />
         </div>
         
@@ -83,9 +83,9 @@ function FlippableImage({ item, alt, ...props }) {
             fill
             {...props}
             priority={true}
-            quality={95}
+            unoptimized={true}
             className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            style={{ filter: "contrast(1.02) brightness(1.02)" }}
           />
         </div>
       </div>
