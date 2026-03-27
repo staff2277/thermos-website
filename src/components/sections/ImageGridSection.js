@@ -11,32 +11,32 @@ if (typeof window !== "undefined") {
 }
 
 const allImages = [
-  "/images/grid/grid-1.jpg",
-  "/images/grid/grid-2.png",
-  "/images/grid/grid-3.jfif",
-  "/images/grid/grid-4.png",
-  "/images/grid/grid-5.png",
-  "/images/grid/grid-6.png",
-  "/images/grid/grid-7.jpg",
-  "/images/grid/grid-8.png",
-  "/images/grid/grid-9.png",
-  "/images/grid/grid-10.png",
-  "/images/grid/grid-11.png",
-  "/images/grid/grid-12.jfif",
-  "/images/grid/grid-13.jfif",
-  "/images/grid/grid-14.jfif",
-  "/images/grid/grid-15.jpg",
+  { src: "/images/grid/grid-1.jpg", portrait: true, aspect: 0.75 },
+  { src: "/images/grid/grid-2.png", portrait: true, aspect: 0.66 },
+  { src: "/images/grid/grid-3.jfif", portrait: false, aspect: 1.33 },
+  { src: "/images/grid/grid-4.png", portrait: true, aspect: 0.66 },
+  { src: "/images/grid/grid-5.png", portrait: true, aspect: 0.7 },
+  { src: "/images/grid/grid-6.png", portrait: false, aspect: 1.77 },
+  { src: "/images/grid/grid-7.jpg", portrait: true, aspect: 0.8 },
+  { src: "/images/grid/grid-8.png", portrait: false, aspect: 1.79 },
+  { src: "/images/grid/grid-9.png", portrait: true, aspect: 0.67 },
+  { src: "/images/grid/grid-10.png", portrait: true, aspect: 0.8 },
+  { src: "/images/grid/grid-11.png", portrait: true, aspect: 0.8 },
+  { src: "/images/grid/grid-12.jfif", portrait: true, aspect: 0.8 },
+  { src: "/images/grid/grid-13.jfif", portrait: true, aspect: 0.61 },
+  { src: "/images/grid/grid-14.jfif", portrait: true, aspect: 0.66 },
+  { src: "/images/grid/grid-15.jpg", portrait: true, aspect: 0.79 },
 ];
 
-function FlippableImage({ src, alt, ...props }) {
-  const [currentSrc, setCurrentSrc] = useState(src);
+function FlippableImage({ item, alt, ...props }) {
+  const [currentSrc, setCurrentSrc] = useState(item.src);
   const [isFlipping, setIsFlipping] = useState(false);
   
   useEffect(() => {
-    if (src !== currentSrc) {
+    if (item.src !== currentSrc) {
       setIsFlipping(true);
       const timer = setTimeout(() => {
-        setCurrentSrc(src);
+        setCurrentSrc(item.src);
       }, 400); 
       
       const resetTimer = setTimeout(() => {
@@ -48,7 +48,7 @@ function FlippableImage({ src, alt, ...props }) {
         clearTimeout(resetTimer);
       };
     }
-  }, [src, currentSrc]);
+  }, [item.src, currentSrc]);
 
   return (
     <div className="w-full h-full" style={{ perspective: "1000px" }}>
@@ -68,13 +68,14 @@ function FlippableImage({ src, alt, ...props }) {
             className="object-cover"
           />
         </div>
+        
         <div 
-          className="absolute inset-0 backface-hidden bg-neutral-900 flex items-center justify-center border border-white/5 shadow-2xl"
+          className="absolute inset-0 backface-hidden bg-neutral-900/80 backdrop-blur-xl flex items-center justify-center border border-white/10"
           style={{ transform: "rotateY(180deg)" }}
         >
-           <div className="flex flex-col items-center gap-4">
-              <div className="w-12 h-12 rounded-full border border-accent/20 flex items-center justify-center">
-                 <div className="w-2 h-2 bg-accent rounded-full animate-ping" />
+           <div className="flex flex-col items-center gap-3">
+              <div className="w-8 h-8 rounded-full border border-accent/30 flex items-center justify-center">
+                 <div className="w-1 h-1 bg-accent rounded-full animate-ping" />
               </div>
            </div>
         </div>
@@ -85,19 +86,26 @@ function FlippableImage({ src, alt, ...props }) {
 
 export default function ImageGridSection() {
   const containerRef = useRef();
-  // Show 8 images now
-  const [visibleImages, setVisibleImages] = useState(allImages.slice(0, 8));
+  const [visibleItems, setVisibleItems] = useState(allImages.slice(0, 6));
   
+  // Preloading Logic
+  useEffect(() => {
+    allImages.forEach(img => {
+      const image = new window.Image();
+      image.src = img.src;
+    });
+  }, []);
+
   useEffect(() => {
     const interval = setInterval(() => {
-      setVisibleImages(prev => {
+      setVisibleItems(prev => {
         const next = [...prev];
-        const slotToReplace = Math.floor(Math.random() * 8);
-        const availablePool = allImages.filter(img => !prev.includes(img));
+        const slotToReplace = Math.floor(Math.random() * 6);
+        const availablePool = allImages.filter(img => !prev.some(p => p.src === img.src));
         
         if (availablePool.length > 0) {
-          const newImg = availablePool[Math.floor(Math.random() * availablePool.length)];
-          next[slotToReplace] = newImg;
+          const newItem = availablePool[Math.floor(Math.random() * availablePool.length)];
+          next[slotToReplace] = newItem;
         }
         
         return next;
@@ -111,7 +119,7 @@ export default function ImageGridSection() {
     gsap.from(".grid-item", {
       opacity: 0,
       scale: 0.9,
-      y: 50,
+      x: 50,
       stagger: 0.1,
       duration: 1,
       ease: "power3.out",
@@ -126,33 +134,48 @@ export default function ImageGridSection() {
   return (
     <section 
       ref={containerRef} 
-      className="relative w-full h-screen px-6 md:px-12 lg:px-24 bg-transparent z-10 flex flex-col justify-center overflow-hidden"
+      className="relative w-full h-screen px-4 md:px-12 bg-transparent z-10 flex flex-col justify-center overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto w-full flex flex-col gap-12 font-outfit">
+      <div className="max-w-[1800px] mx-auto w-full flex flex-col gap-12 font-outfit">
         <div className="flex flex-col gap-4 max-w-2xl px-4">
           <div className="flex items-center gap-3">
             <span className="h-[1px] w-12 bg-accent opacity-50" />
             <span className="text-accent font-bold tracking-[0.4em] uppercase text-[10px]">
-              Active Ensemble
+              Active Horizon
             </span>
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-tight text-white uppercase italic">
-            DYNAMIC <span className="text-accent underline decoration-white/10 underline-offset-8">SPOTLIGHT.</span>
+            DYNAMIC <span className="text-accent">STRIDE.</span>
           </h2>
         </div>
 
-        {/* Regular 4x2 Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 h-[55vh] md:h-[65vh] w-full px-4">
-          {visibleImages.map((src, idx) => (
-             <div key={idx} className="grid-item relative overflow-visible rounded-[2rem] border border-white/5 bg-neutral-900 shadow-xl">
+        {/* Single Horizontal Row (Aspect-aware) */}
+        <div className="flex flex-nowrap gap-2 md:gap-4 h-[40vh] md:h-[50vh] w-full items-stretch perspective-2000">
+          {visibleItems.map((item, idx) => (
+             <div 
+                key={idx} 
+                className="grid-item relative overflow-visible rounded-[2rem] md:rounded-[3rem] border border-white/5 bg-neutral-900 shadow-2xl transition-all duration-[1200ms] ease-in-out"
+                style={{ 
+                  flex: `${item.aspect}`,
+                  minWidth: item.portrait ? "150px" : "250px"
+                }}
+             >
                  <FlippableImage 
-                    src={src}
-                    alt={`Spotlight ${idx + 1}`}
-                    sizes="(max-width: 768px) 50vw, 25vw"
+                    item={item}
+                    alt={`Dynamic Item ${idx + 1}`}
+                    sizes="(max-width: 768px) 50vw, 20vw"
                  />
-                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none rounded-[2rem]" />
+                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none rounded-[2rem] md:rounded-[3rem] z-20" />
              </div>
           ))}
+        </div>
+        
+        <div className="flex justify-between items-center opacity-20 px-4">
+           <span className="text-[10px] font-black tracking-[0.5em] uppercase">Horizon Sync: Active</span>
+           <div className="flex gap-8">
+             <span className="text-[10px] font-black tracking-[0.5em] uppercase text-accent animate-pulse">Scanning Field...</span>
+             <span className="text-[10px] font-black tracking-[0.5em] uppercase">v4.2</span>
+           </div>
         </div>
       </div>
       
@@ -163,6 +186,9 @@ export default function ImageGridSection() {
         .backface-hidden {
           backface-visibility: hidden;
           -webkit-backface-visibility: hidden;
+        }
+        .perspective-2000 {
+           perspective: 2000px;
         }
       `}</style>
     </section>
