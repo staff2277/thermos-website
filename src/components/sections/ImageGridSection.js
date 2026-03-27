@@ -36,12 +36,10 @@ function FlippableImage({ item, alt, ...props }) {
   
   useEffect(() => {
     if (item.src !== lastItem.src) {
-      // If we are currently showing front, put new item on back and flip
       if (!isFlipped) {
         setBackItem(item);
         setIsFlipped(true);
       } else {
-        // If we are showing back, put new item on front and flip back
         setFrontItem(item);
         setIsFlipped(false);
       }
@@ -50,16 +48,19 @@ function FlippableImage({ item, alt, ...props }) {
   }, [item, isFlipped, lastItem]);
 
   return (
-    <div className="w-full h-full" style={{ perspective: "1200px" }}>
+    <div className="w-full h-full" style={{ perspective: "1500px" }}>
       <div 
-        className="relative w-full h-full transition-transform duration-[1000ms]"
+        className="relative w-full h-full transition-transform duration-[1200ms]"
         style={{ 
           transformStyle: "preserve-3d",
           transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)"
         }}
       >
         {/* Front Face */}
-        <div className="absolute inset-0 backface-hidden z-20">
+        <div 
+          className="absolute inset-0 z-20"
+          style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
+        >
           <Image 
             src={frontItem.src}
             alt={alt}
@@ -74,8 +75,12 @@ function FlippableImage({ item, alt, ...props }) {
         
         {/* Back Face (True 2nd side) */}
         <div 
-          className="absolute inset-0 backface-hidden"
-          style={{ transform: "rotateY(180deg)" }}
+          className="absolute inset-0"
+          style={{ 
+            backfaceVisibility: "hidden", 
+            WebkitBackfaceVisibility: "hidden",
+            transform: "rotateY(180deg)" 
+          }}
         >
           <Image 
             src={backItem.src}
@@ -121,25 +126,28 @@ export default function ImageGridSection() {
         
         return next;
       });
-    }, 3000); // Slowed down to 3 seconds
+    }, 3000); 
     
     return () => clearInterval(interval);
   }, []);
 
   useGSAP(() => {
-    gsap.from(".grid-item", {
-      opacity: 0,
-      scale: 0.9,
-      x: 50,
-      stagger: 0.1,
-      duration: 1,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top 75%",
-        toggleActions: "play none none reverse",
+    gsap.fromTo(".grid-item", 
+      { opacity: 0, x: 50, scale: 0.95 },
+      {
+        opacity: 1,
+        scale: 1,
+        x: 0,
+        stagger: 0.1,
+        duration: 1.2,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 75%",
+          toggleActions: "play none none reverse",
+        }
       }
-    });
+    );
   }, { scope: containerRef });
 
   return (
@@ -150,7 +158,7 @@ export default function ImageGridSection() {
       {/* Hidden pool to force browser to keep all images in cache */}
       <div className="hidden" aria-hidden="true">
         {allImages.map((img, i) => (
-          <Image key={i} src={img.src} alt="preload" width={100} height={100} priority={true} />
+          <Image key={i} src={img.src} alt="preload" width={100} height={100} priority={true} unoptimized={true} />
         ))}
       </div>
 
@@ -168,14 +176,15 @@ export default function ImageGridSection() {
         </div>
 
         {/* Single Horizontal Row (Aspect-aware) */}
-        <div className="flex flex-nowrap gap-2 md:gap-4 h-[40vh] md:h-[50vh] w-full items-stretch perspective-2000">
+        <div className="flex flex-nowrap gap-2 md:gap-4 h-[40vh] md:h-[50vh] w-full items-stretch" style={{ perspective: "2000px" }}>
           {visibleItems.map((item, idx) => (
              <div 
                 key={idx} 
-                className="grid-item relative overflow-visible rounded-[2rem] md:rounded-[3rem] border border-white/5 bg-neutral-900 shadow-2xl transition-all duration-[1200ms] ease-in-out"
+                className="grid-item opacity-0 relative overflow-visible rounded-[2rem] md:rounded-[3rem] border border-white/5 bg-neutral-900 shadow-2xl"
                 style={{ 
                   flex: `${item.aspect}`,
-                  minWidth: item.portrait ? "180px" : "300px"
+                  minWidth: item.portrait ? "180px" : "300px",
+                  transition: "flex 1200ms ease-in-out, min-width 1200ms ease-in-out"
                 }}
              >
                  <FlippableImage 
@@ -187,9 +196,9 @@ export default function ImageGridSection() {
           ))}
         </div>
         
-        <div className="flex justify-between items-center opacity-20 px-4">
-           <span className="text-[10px] font-black tracking-[0.5em] uppercase">Horizon Sync: Active</span>
-           <div className="flex gap-8">
+        <div className="flex justify-between items-center opacity-20 px-4 mt-4">
+           <span className="text-[10px] font-black tracking-[0.5em] uppercase hidden md:block">Horizon Sync: Active</span>
+           <div className="flex gap-4 md:gap-8 ml-auto">
              <span className="text-[10px] font-black tracking-[0.5em] uppercase text-accent animate-pulse">Scanning Field...</span>
              <span className="text-[10px] font-black tracking-[0.5em] uppercase">v4.2</span>
            </div>
@@ -198,16 +207,7 @@ export default function ImageGridSection() {
       
       {/* Background Decorative Element */}
       <div className="absolute top-1/2 left-0 w-[800px] h-[800px] bg-accent/5 rounded-full blur-[200px] -z-10 -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-      
-      <style jsx global>{`
-        .backface-hidden {
-          backface-visibility: hidden;
-          -webkit-backface-visibility: hidden;
-        }
-        .perspective-2000 {
-           perspective: 2000px;
-        }
-      `}</style>
     </section>
   );
 }
+
