@@ -15,7 +15,6 @@ import * as THREE from "three";
 const allImages = [
   { src: "/images/grid/grid-1.jpg", portrait: true, aspect: 0.75 },
   { src: "/images/grid/grid-2.png", portrait: true, aspect: 0.66 },
-  { src: "/images/grid/grid-3.jfif", portrait: false, aspect: 1.33 },
   { src: "/images/grid/grid-4.png", portrait: true, aspect: 0.66 },
   { src: "/images/grid/grid-5.png", portrait: true, aspect: 0.7 },
   { src: "/images/grid/grid-6.png", portrait: false, aspect: 1.77 },
@@ -25,6 +24,8 @@ const allImages = [
   { src: "/images/grid/grid-10.png", portrait: true, aspect: 0.8 },
   { src: "/images/grid/grid-11.png", portrait: true, aspect: 0.8 },
   { src: "/images/grid/grid-15.jpg", portrait: true, aspect: 0.79 },
+  { src: "/images/grid/pexels-ketut-subiyanto-5038852.jpg", portrait: false, aspect: 1.5 },
+  { src: "/images/grid/pexels-sarah-chai-7266767.jpg", portrait: false, aspect: 1.5 },
 ];
 
 function FlippableImage({ item, alt, ...props }) {
@@ -120,7 +121,7 @@ export default function ImageGridSection() {
         
         return next;
       });
-    }, 2000);
+    }, 3000); // Slowed down to 3 seconds
     
     return () => clearInterval(interval);
   }, []);
