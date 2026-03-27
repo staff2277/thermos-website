@@ -22,17 +22,77 @@ const allImages = [
   "/images/grid/grid-9.png",
   "/images/grid/grid-10.png",
   "/images/grid/grid-11.png",
+  "/images/grid/grid-12.jfif",
+  "/images/grid/grid-13.jfif",
+  "/images/grid/grid-14.jfif",
+  "/images/grid/grid-15.jpg",
 ];
+
+function FlippableImage({ src, alt, ...props }) {
+  const [currentSrc, setCurrentSrc] = useState(src);
+  const [isFlipping, setIsFlipping] = useState(false);
+  
+  useEffect(() => {
+    if (src !== currentSrc) {
+      setIsFlipping(true);
+      const timer = setTimeout(() => {
+        setCurrentSrc(src);
+      }, 400); 
+      
+      const resetTimer = setTimeout(() => {
+        setIsFlipping(false);
+      }, 800); 
+      
+      return () => {
+        clearTimeout(timer);
+        clearTimeout(resetTimer);
+      };
+    }
+  }, [src, currentSrc]);
+
+  return (
+    <div className="w-full h-full" style={{ perspective: "1000px" }}>
+      <div 
+        className="relative w-full h-full transition-transform duration-800"
+        style={{ 
+          transformStyle: "preserve-3d",
+          transform: isFlipping ? "rotateY(180deg)" : "rotateY(0deg)"
+        }}
+      >
+        <div className="absolute inset-0 backface-hidden">
+          <Image 
+            src={currentSrc}
+            alt={alt}
+            fill
+            {...props}
+            className="object-cover"
+          />
+        </div>
+        <div 
+          className="absolute inset-0 backface-hidden bg-neutral-900 flex items-center justify-center border border-white/5 shadow-2xl"
+          style={{ transform: "rotateY(180deg)" }}
+        >
+           <div className="flex flex-col items-center gap-4">
+              <div className="w-12 h-12 rounded-full border border-accent/20 flex items-center justify-center">
+                 <div className="w-2 h-2 bg-accent rounded-full animate-ping" />
+              </div>
+           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function ImageGridSection() {
   const containerRef = useRef();
-  const [visibleImages, setVisibleImages] = useState(allImages.slice(0, 5));
+  // Show 8 images now
+  const [visibleImages, setVisibleImages] = useState(allImages.slice(0, 8));
   
   useEffect(() => {
     const interval = setInterval(() => {
       setVisibleImages(prev => {
         const next = [...prev];
-        const slotToReplace = Math.floor(Math.random() * 5);
+        const slotToReplace = Math.floor(Math.random() * 8);
         const availablePool = allImages.filter(img => !prev.includes(img));
         
         if (availablePool.length > 0) {
@@ -42,7 +102,7 @@ export default function ImageGridSection() {
         
         return next;
       });
-    }, 1000);
+    }, 2000);
     
     return () => clearInterval(interval);
   }, []);
@@ -69,79 +129,30 @@ export default function ImageGridSection() {
       className="relative w-full h-screen px-6 md:px-12 lg:px-24 bg-transparent z-10 flex flex-col justify-center overflow-hidden"
     >
       <div className="max-w-7xl mx-auto w-full flex flex-col gap-12 font-outfit">
-        <div className="flex flex-col gap-4 max-w-2xl">
+        <div className="flex flex-col gap-4 max-w-2xl px-4">
           <div className="flex items-center gap-3">
             <span className="h-[1px] w-12 bg-accent opacity-50" />
-            <span className="text-accent font-bold tracking-[0.4em] uppercase text-xs">
-              Live Feed
+            <span className="text-accent font-bold tracking-[0.4em] uppercase text-[10px]">
+              Active Ensemble
             </span>
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-tight text-white uppercase italic">
-            DYNAMIC <span className="text-accent underline decoration-white/10 underline-offset-8">FLUX.</span>
+            DYNAMIC <span className="text-accent underline decoration-white/10 underline-offset-8">SPOTLIGHT.</span>
           </h2>
-          <p className="text-white/40 max-w-md font-bold uppercase tracking-widest text-[10px]">
-             Real-time aesthetic synchronization // Community Spotlight
-          </p>
         </div>
 
-        {/* Regular Mosaic Grid: 3 columns, 2 rows */}
-        <div className="grid grid-cols-1 md:grid-cols-3 grid-rows-4 md:grid-rows-2 gap-4 h-[50vh] md:h-[60vh] w-full">
-          {/* Big Item */}
-          <div className="grid-item relative overflow-hidden rounded-3xl border border-white/5 bg-neutral-900 col-span-1 md:col-span-1 md:row-span-2 group">
-              <Image 
-                key={visibleImages[0]}
-                src={visibleImages[0]}
-                alt="Feed 1"
-                fill
-                className="object-cover animate-swap-fade scale-105 group-hover:scale-110 transition-transform duration-700"
-                sizes="(max-width: 768px) 100vw, 33vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
-          </div>
-
-          <div className="grid-item relative overflow-hidden rounded-3xl border border-white/5 bg-neutral-900 col-span-1 md:col-span-1 row-span-1 group">
-              <Image 
-                key={visibleImages[1]}
-                src={visibleImages[1]}
-                alt="Feed 2"
-                fill
-                className="object-cover animate-swap-fade group-hover:scale-110 transition-transform duration-700"
-                sizes="(max-width: 768px) 100vw, 33vw"
-              />
-          </div>
-
-          <div className="grid-item relative overflow-hidden rounded-3xl border border-white/5 bg-neutral-900 col-span-1 md:col-span-1 row-span-1 group">
-              <Image 
-                key={visibleImages[2]}
-                src={visibleImages[2]}
-                alt="Feed 3"
-                fill
-                className="object-cover animate-swap-fade group-hover:scale-110 transition-transform duration-700"
-                sizes="(max-width: 768px) 25vw, 33vw"
-              />
-          </div>
-
-          <div className="grid-item relative overflow-hidden rounded-3xl border border-white/5 bg-neutral-900 col-span-1 md:col-span-1 row-span-1 group">
-              <Image 
-                key={visibleImages[3]}
-                src={visibleImages[3]}
-                alt="Feed 4"
-                fill
-                className="object-cover animate-swap-fade group-hover:scale-110 transition-transform duration-700"
-                sizes="(max-width: 768px) 25vw, 33vw"
-              />
-          </div>
-
-          <div className="grid-item relative overflow-hidden rounded-3xl border border-white/5 bg-neutral-900 col-span-1 md:col-span-1 row-span-1 group">
-              <Image 
-                key={visibleImages[4]}
-                src={visibleImages[4]}
-                alt="Feed 5"
-                fill
-                className="object-cover animate-swap-fade group-hover:scale-110 transition-transform duration-700"
-                sizes="(max-width: 768px) 25vw, 33vw"
-              />
-          </div>
+        {/* Regular 4x2 Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 h-[55vh] md:h-[65vh] w-full px-4">
+          {visibleImages.map((src, idx) => (
+             <div key={idx} className="grid-item relative overflow-visible rounded-[2rem] border border-white/5 bg-neutral-900 shadow-xl">
+                 <FlippableImage 
+                    src={src}
+                    alt={`Spotlight ${idx + 1}`}
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                 />
+                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none rounded-[2rem]" />
+             </div>
+          ))}
         </div>
       </div>
       
@@ -149,12 +160,9 @@ export default function ImageGridSection() {
       <div className="absolute top-1/2 left-0 w-[800px] h-[800px] bg-accent/5 rounded-full blur-[200px] -z-10 -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
       
       <style jsx global>{`
-        @keyframes swapFade {
-          0% { opacity: 0.5; filter: blur(4px) scale(1.1); transform: translateY(10px); }
-          100% { opacity: 1; filter: blur(0px) scale(1); transform: translateY(0px); }
-        }
-        .animate-swap-fade {
-          animation: swapFade 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        .backface-hidden {
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
         }
       `}</style>
     </section>
