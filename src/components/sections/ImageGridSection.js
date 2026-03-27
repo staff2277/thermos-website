@@ -10,6 +10,8 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
 
+import * as THREE from "three";
+
 const allImages = [
   { src: "/images/grid/grid-1.jpg", portrait: true, aspect: 0.75 },
   { src: "/images/grid/grid-2.png", portrait: true, aspect: 0.66 },
@@ -29,55 +31,60 @@ const allImages = [
 ];
 
 function FlippableImage({ item, alt, ...props }) {
-  const [currentSrc, setCurrentSrc] = useState(item.src);
-  const [isFlipping, setIsFlipping] = useState(false);
+  const [frontItem, setFrontItem] = useState(item);
+  const [backItem, setBackItem] = useState(item);
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [lastItem, setLastItem] = useState(item);
   
   useEffect(() => {
-    if (item.src !== currentSrc) {
-      setIsFlipping(true);
-      const timer = setTimeout(() => {
-        setCurrentSrc(item.src);
-      }, 400); 
-      
-      const resetTimer = setTimeout(() => {
-        setIsFlipping(false);
-      }, 800); 
-      
-      return () => {
-        clearTimeout(timer);
-        clearTimeout(resetTimer);
-      };
+    if (item.src !== lastItem.src) {
+      // If we are currently showing front, put new item on back and flip
+      if (!isFlipped) {
+        setBackItem(item);
+        setIsFlipped(true);
+      } else {
+        // If we are showing back, put new item on front and flip back
+        setFrontItem(item);
+        setIsFlipped(false);
+      }
+      setLastItem(item);
     }
-  }, [item.src, currentSrc]);
+  }, [item, isFlipped, lastItem]);
 
   return (
-    <div className="w-full h-full" style={{ perspective: "1000px" }}>
+    <div className="w-full h-full" style={{ perspective: "1200px" }}>
       <div 
-        className="relative w-full h-full transition-transform duration-800"
+        className="relative w-full h-full transition-transform duration-[1000ms]"
         style={{ 
           transformStyle: "preserve-3d",
-          transform: isFlipping ? "rotateY(180deg)" : "rotateY(0deg)"
+          transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)"
         }}
       >
-        <div className="absolute inset-0 backface-hidden">
+        {/* Front Face */}
+        <div className="absolute inset-0 backface-hidden z-20">
           <Image 
-            src={currentSrc}
+            src={frontItem.src}
             alt={alt}
             fill
             {...props}
+            priority={true}
             className="object-cover"
           />
         </div>
         
+        {/* Back Face (True 2nd side) */}
         <div 
-          className="absolute inset-0 backface-hidden bg-neutral-900/80 backdrop-blur-xl flex items-center justify-center border border-white/10"
+          className="absolute inset-0 backface-hidden"
           style={{ transform: "rotateY(180deg)" }}
         >
-           <div className="flex flex-col items-center gap-3">
-              <div className="w-8 h-8 rounded-full border border-accent/30 flex items-center justify-center">
-                 <div className="w-1 h-1 bg-accent rounded-full animate-ping" />
-              </div>
-           </div>
+          <Image 
+            src={backItem.src}
+            alt={alt}
+            fill
+            {...props}
+            priority={true}
+            className="object-cover"
+          />
         </div>
       </div>
     </div>
@@ -86,13 +93,15 @@ function FlippableImage({ item, alt, ...props }) {
 
 export default function ImageGridSection() {
   const containerRef = useRef();
-  const [visibleItems, setVisibleItems] = useState(allImages.slice(0, 6));
+  const [visibleItems, setVisibleItems] = useState(allImages.slice(0, 5));
   
-  // Preloading Logic
+  // Preloading into THREE Manager so the global Loader counts them
   useEffect(() => {
+    const manager = THREE.DefaultLoadingManager;
+    const loader = new THREE.TextureLoader(manager);
+    
     allImages.forEach(img => {
-      const image = new window.Image();
-      image.src = img.src;
+      loader.load(img.src);
     });
   }, []);
 
@@ -100,7 +109,7 @@ export default function ImageGridSection() {
     const interval = setInterval(() => {
       setVisibleItems(prev => {
         const next = [...prev];
-        const slotToReplace = Math.floor(Math.random() * 6);
+        const slotToReplace = Math.floor(Math.random() * 5);
         const availablePool = allImages.filter(img => !prev.some(p => p.src === img.src));
         
         if (availablePool.length > 0) {
@@ -136,6 +145,13 @@ export default function ImageGridSection() {
       ref={containerRef} 
       className="relative w-full h-screen px-4 md:px-12 bg-transparent z-10 flex flex-col justify-center overflow-hidden"
     >
+      {/* Hidden pool to force browser to keep all images in cache */}
+      <div className="hidden" aria-hidden="true">
+        {allImages.map((img, i) => (
+          <Image key={i} src={img.src} alt="preload" width={100} height={100} priority={true} />
+        ))}
+      </div>
+
       <div className="max-w-[1800px] mx-auto w-full flex flex-col gap-12 font-outfit">
         <div className="flex flex-col gap-4 max-w-2xl px-4">
           <div className="flex items-center gap-3">
