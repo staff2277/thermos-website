@@ -24,24 +24,18 @@ export default function UnifiedScrollPath({ children }) {
       strokeDashoffset: length,
     });
 
-    // Animate path based on scroll of the entire container
-    const trigger = ScrollTrigger.create({
-      trigger: containerRef.current,
-      start: "top center",
-      end: "bottom center",
-      scrub: 1.5,
-      onUpdate: (self) => {
-        gsap.to(path, {
-          strokeDashoffset: length * (1 - self.progress),
-          ease: "none",
-          overwrite: "auto",
-        });
-      },
+    // Synchronous drawing animation
+    gsap.to(path, {
+      strokeDashoffset: 0,
+      ease: "none",
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "top center",
+        end: "bottom center",
+        scrub: true, // Instant catch-up
+        invalidateOnRefresh: true,
+      }
     });
-
-    return () => {
-      trigger.kill();
-    };
   }, []);
 
   return (

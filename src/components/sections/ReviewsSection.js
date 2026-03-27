@@ -112,8 +112,8 @@ export default function ReviewsSection() {
         </div>
       </div>
 
-      <div ref={scrollRef} className="flex gap-8 px-6 md:px-12 lg:px-24">
-        {reviews.slice(0, 5).map((review) => (
+      <div ref={scrollRef} className="flex gap-8 px-6 md:px-12 lg:px-24 justify-center items-center flex-wrap">
+        {reviews.slice(0, 3).map((review) => (
           <div
             key={review.id}
             className="review-card flex-shrink-0 w-[300px] md:w-[450px] p-10 bg-white/5 border border-white/10 rounded-[2.5rem] flex flex-col gap-8 relative transition-all duration-700 hover:bg-white/10 hover:border-accent/30"

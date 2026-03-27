@@ -17,12 +17,14 @@ import Footer from "@/components/Footer";
 import CartSidebar from "@/components/layout/CartSidebar";
 import PageTransition from "@/components/layout/PageTransition";
 import ScrollPath from "@/components/layout/ScrollPath";
+import Loader from "@/components/layout/Loader";
 import { AppProvider } from "@/lib/store";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${outfit.variable} antialiased min-h-screen flex flex-col bg-black`}>
+        <Loader />
         <AppProvider>
           <Navbar />
           <CartSidebar />
