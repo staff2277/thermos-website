@@ -181,7 +181,7 @@ export default function ImageGridSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 auto-rows-[250px] md:auto-rows-[400px]">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 auto-rows-[250px] md:auto-rows-[400px]">
           {gridItems.map((item, idx) => (
             <div 
               key={idx} 
