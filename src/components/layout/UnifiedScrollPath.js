@@ -49,11 +49,7 @@ export default function UnifiedScrollPath({ children }) {
         >
           {/* Subtle Glow Layer */}
           <path
-            d="M 500 0 
-               C 500 400, 850 400, 850 1500 
-               S 150 2600, 150 3000 
-               S 850 3400, 850 4500 
-               S 500 5600, 500 6000"
+            d="M 500 0 C 500 400, 850 400, 850 1500 S 150 2600, 150 3000 S 850 3400, 850 4500 S 500 5600, 500 6000"
             fill="none"
             stroke="var(--color-accent)"
             strokeWidth="50"
@@ -66,11 +62,7 @@ export default function UnifiedScrollPath({ children }) {
           {/* Main Drawing Path */}
           <path
             ref={pathRef}
-            d="M 500 0 
-               C 500 400, 850 400, 850 1500 
-               S 150 2600, 150 3000 
-               S 850 3400, 850 4500 
-               S 500 5600, 500 6000"
+            d="M 500 0 C 500 400, 850 400, 850 1500 S 150 2600, 150 3000 S 850 3400, 850 4500 S 500 5600, 500 6000"
             fill="none"
             stroke="var(--color-accent)"
             strokeWidth="30"
@@ -81,11 +73,7 @@ export default function UnifiedScrollPath({ children }) {
           />
 
           <path
-            d="M 500 0 
-               C 500 400, 850 400, 850 1500 
-               S 150 2600, 150 3000 
-               S 850 3400, 850 4500 
-               S 500 5600, 500 6000"
+            d="M 500 0 C 500 400, 850 400, 850 1500 S 150 2600, 150 3000 S 850 3400, 850 4500 S 500 5600, 500 6000"
             fill="none"
             stroke="white"
             strokeWidth="1"
