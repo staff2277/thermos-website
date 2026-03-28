@@ -74,14 +74,21 @@ export default function ProductShowcaseSection() {
     const scrollContainer = scrollRef.current;
     if (scrollContainer) {
       const handleWheel = (e) => {
+        // If it's horizontal scrolling (like trackpad swipe), let natural scrolling work
+        if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+
         const isAtStart = scrollContainer.scrollLeft <= 0;
         const isAtEnd =
-          scrollContainer.scrollLeft + scrollContainer.clientWidth >=
-          scrollContainer.scrollWidth - 1;
+          Math.ceil(scrollContainer.scrollLeft + scrollContainer.clientWidth) >=
+          scrollContainer.scrollWidth;
+        
         const isScrollingUp = e.deltaY < 0;
         const isScrollingDown = e.deltaY > 0;
+        
+        // If at the ends of the horizontal list, allow natural vertical scroll of the page to continue
         if ((isAtStart && isScrollingUp) || (isAtEnd && isScrollingDown))
           return;
+          
         e.preventDefault();
         gsap.to(scrollContainer, {
           scrollLeft: scrollContainer.scrollLeft + e.deltaY * 2,
@@ -90,6 +97,8 @@ export default function ProductShowcaseSection() {
           overwrite: "auto",
         });
       };
+      
+      // Use non-passive listener to allow preventDefault
       scrollContainer.addEventListener("wheel", handleWheel, {
         passive: false,
       });
@@ -141,7 +150,7 @@ export default function ProductShowcaseSection() {
         <div className="relative -mx-6 md:-mx-12 lg:-mx-24 py-12 ">
           <div
             ref={scrollRef}
-            className="flex overflow-x-auto gap-8 pb-12 snap-x snap-mandatory lg:snap-none hide-scrollbar group px-6 md:px-12 lg:px-24"
+            className="flex overflow-x-auto gap-8 pb-12 snap-x snap-mandatory lg:snap-none hide-scrollbar group px-6 md:px-12 lg:px-24 touch-pan-x"
             style={{
               scrollbarWidth: "none",
               msOverflowStyle: "none",

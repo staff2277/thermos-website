@@ -94,20 +94,20 @@ export default function FeaturesSection() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full py-48 bg-transparent overflow-hidden px-6 md:px-12 lg:px-24"
+      className="relative w-full py-24 md:py-32 lg:py-48 bg-transparent overflow-hidden px-4 sm:px-6 md:px-12 lg:px-24"
     >
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-accent/5 rounded-full blur-[150px] -z-10 translate-x-1/2 -translate-y-1/2" />
 
-      <div className="max-w-7xl mx-auto flex flex-col gap-24 relative z-10">
-        <div className="flex flex-col gap-6 max-w-2xl">
+      <div className="max-w-7xl mx-auto flex flex-col gap-12 md:gap-24 relative z-10">
+        <div className="flex flex-col gap-4 md:gap-6 max-w-2xl">
           <div className="flex items-center gap-3">
-            <span className="animate-header h-[1px] w-12 bg-accent" />
-            <span className="animate-header text-accent font-bold tracking-[0.3em] uppercase text-xs">
+            <span className="animate-header h-[1px] w-8 md:w-12 bg-accent" />
+            <span className="animate-header text-accent font-bold tracking-[0.3em] uppercase text-[10px] md:text-xs text-wrap">
               Engineering Specs
             </span>
           </div>
-          <h2 className="animate-header text-6xl md:text-7xl font-black tracking-tighter leading-tight text-white">
+          <h2 className="animate-header text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-tight text-white">
             THE PEAK OF <br />
             <span
               className="bg-clip-text text-transparent animate-gradient-text"
@@ -123,7 +123,7 @@ export default function FeaturesSection() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {features.map((feature, idx) => (
             <div 
               key={idx} 

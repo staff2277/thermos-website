@@ -320,8 +320,8 @@ export default function HeroSection() {
         </div>
 
         {/* Page 1: Hero Content Overlay */}
-        <div className="hero-content-section w-full h-screen flex items-center px-6 md:px-12 lg:px-24 pointer-events-none">
-          <div className="w-full md:w-[45%] lg:w-[40%] p-8 md:p-12 rounded-[2.5rem] bg-white/10 backdrop-blur-sm border-[0.05] border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.15)] flex flex-col gap-8 pointer-events-auto transform transition-all duration-700 hover:bg-white/15">
+        <div className="hero-content-section w-full h-screen flex items-end md:items-center px-4 md:px-12 lg:px-24 pb-24 md:pb-0 pointer-events-none">
+          <div className="w-full md:w-[45%] lg:w-[40%] p-6 md:p-12 rounded-[2.5rem] bg-white/10 backdrop-blur-sm border-[0.05] border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.15)] flex flex-col gap-6 md:gap-8 pointer-events-auto transform transition-all duration-700 hover:bg-white/15">
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-3 animate-item">
                 <span className="h-[1px] w-8 bg-accent" />
@@ -370,8 +370,8 @@ export default function HeroSection() {
         </div>
 
         {/* Page 2: Battery Content Overlay */}
-        <div className="battery-section w-full h-screen flex items-center justify-end px-6 md:px-12 lg:px-24 pointer-events-none">
-          <div className="w-full md:w-[45%] lg:w-[40%] p-8 md:p-12 rounded-[2.5rem] bg-white/10 backdrop-blur-sm border-[0.05] border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.15)] flex flex-col gap-8 pointer-events-auto transform transition-all duration-700 hover:bg-white/15">
+        <div className="battery-section w-full h-screen flex items-end md:items-center justify-end px-4 md:px-12 lg:px-24 pb-24 md:pb-0 pointer-events-none">
+          <div className="w-full md:w-[45%] lg:w-[40%] p-6 md:p-12 rounded-[2.5rem] bg-white/10 backdrop-blur-sm border-[0.05] border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.15)] flex flex-col gap-6 md:gap-8 pointer-events-auto transform transition-all duration-700 hover:bg-white/15">
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-3 animate-item-2">
                 <span className="h-[1px] w-8 bg-accent" />
@@ -413,8 +413,8 @@ export default function HeroSection() {
         </div>
 
         {/* Page 3: Temperature Content Overlay */}
-        <div className="temp-section w-full h-screen flex items-center justify-start px-6 md:px-12 lg:px-24 pointer-events-none">
-          <div className="w-full md:w-[45%] lg:w-[40%] p-8 md:p-12 rounded-[2.5rem] bg-white/10 backdrop-blur-sm border-[0.05] border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.15)] flex flex-col gap-8 pointer-events-auto transform transition-all duration-700 hover:bg-white/15">
+        <div className="temp-section w-full h-screen flex items-end md:items-center justify-start px-4 md:px-12 lg:px-24 pb-24 md:pb-0 pointer-events-none">
+          <div className="w-full md:w-[45%] lg:w-[40%] p-6 md:p-12 rounded-[2.5rem] bg-white/10 backdrop-blur-sm border-[0.05] border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.15)] flex flex-col gap-6 md:gap-8 pointer-events-auto transform transition-all duration-700 hover:bg-white/15">
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-3 animate-item-3">
                 <span className="h-[1px] w-8 bg-accent" />

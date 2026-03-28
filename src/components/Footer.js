@@ -126,20 +126,25 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-white/5 pt-12 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex gap-8 text-[10px] font-black uppercase tracking-widest text-white/20">
-            <Link href="/privacy" className="hover:text-accent transition-colors">
+            <Link
+              href="/privacy"
+              className="hover:text-accent transition-colors"
+            >
               Privacy Policy
             </Link>
             <Link href="/terms" className="hover:text-accent transition-colors">
               Terms of Service
             </Link>
-            <Link href="/cookies" className="hover:text-accent transition-colors">
+            <Link
+              href="/cookies"
+              className="hover:text-accent transition-colors"
+            >
               Cookie Settings
             </Link>
           </div>
           <p className="text-[10px] font-black uppercase tracking-widest text-white/20 text-center md:text-right">
             © {currentYear} THERMOS CO. ALL RIGHTS RESERVED.{" "}
             <br className="md:hidden" />
-            <span className="text-accent/40">DESIGNED BY ANTIGRAVITY</span>
           </p>
         </div>
       </div>

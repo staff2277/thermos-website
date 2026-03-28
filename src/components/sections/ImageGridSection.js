@@ -176,14 +176,14 @@ export default function ImageGridSection() {
         </div>
 
         {/* Single Horizontal Row (Aspect-aware) */}
-        <div className="flex flex-nowrap gap-2 md:gap-4 h-[40vh] md:h-[50vh] w-full items-stretch" style={{ perspective: "2000px" }}>
+        <div className="flex flex-nowrap gap-4 h-[40vh] md:h-[50vh] w-full items-stretch overflow-x-auto overflow-y-hidden hide-scrollbar snap-x snap-mandatory touch-pan-x pb-4 md:pb-0" style={{ perspective: "2000px" }}>
           {visibleItems.map((item, idx) => (
              <div 
                 key={idx} 
-                className="grid-item opacity-0 relative overflow-visible rounded-[2rem] md:rounded-[3rem] border border-white/5 bg-neutral-900 shadow-2xl"
+                className="grid-item opacity-0 relative overflow-visible rounded-[2rem] md:rounded-[3rem] border border-white/5 bg-neutral-900 shadow-2xl flex-shrink-0 snap-center md:flex-shrink"
                 style={{ 
                   flex: `${item.aspect}`,
-                  minWidth: item.portrait ? "180px" : "300px",
+                  minWidth: item.portrait ? "240px" : "300px",
                   transition: "flex 1200ms ease-in-out, min-width 1200ms ease-in-out"
                 }}
              >

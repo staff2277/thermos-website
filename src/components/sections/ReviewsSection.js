@@ -76,17 +76,17 @@ export default function ReviewsSection() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full min-h-screen bg-transparent overflow-hidden flex flex-col justify-center py-24 md:py-32"
+      className="relative w-full min-h-screen bg-transparent overflow-hidden flex flex-col justify-center py-16 sm:py-24 md:py-32"
     >
-      <div className="max-w-[95%] mx-auto px-6 md:px-12 lg:px-24 mb-20 flex flex-col gap-6">
+      <div className="max-w-[95%] mx-auto px-4 sm:px-6 md:px-12 lg:px-24 mb-12 flex flex-col gap-4 md:gap-6">
         <div className="flex items-center gap-3">
-          <span className="animate-review h-[1px] w-12 bg-accent opacity-50" />
-          <span className="animate-review text-accent/60 font-bold tracking-[0.3em] uppercase text-xs">
+          <span className="animate-review h-[1px] w-8 md:w-12 bg-accent opacity-50" />
+          <span className="animate-review text-accent/60 font-bold tracking-[0.3em] uppercase text-[10px] md:text-xs">
             Global Recognition
           </span>
         </div>
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-          <h2 className="animate-review text-6xl md:text-7xl font-black tracking-tighter leading-tight">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8">
+          <h2 className="animate-review text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-tight">
             WORLD CLASS <br />
             <span
               className="bg-clip-text text-transparent animate-gradient-text"
@@ -102,7 +102,7 @@ export default function ReviewsSection() {
           </h2>
           <Link
             href="/reviews"
-            className="animate-review group px-10 py-5 bg-white/5 backdrop-blur-md border border-white/10 text-white rounded-full hover:bg-accent hover:border-accent transition-all duration-500 font-black flex items-center gap-3"
+            className="animate-review group px-8 py-4 md:px-10 md:py-5 bg-white/5 backdrop-blur-md border border-white/10 text-white rounded-full hover:bg-accent hover:border-accent transition-all duration-500 font-black flex items-center justify-center gap-3 w-full md:w-auto"
           >
             Read All Reviews
             <span className="group-hover:translate-x-2 transition-transform">

@@ -9,26 +9,41 @@ export default function Loader({ onComplete }) {
   const [percent, setPercent] = useState(0);
   const [isReady, setIsReady] = useState(false);
 
+  const [forceComplete, setForceComplete] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
 
   useEffect(() => {
+    // Fallback timeout to prevent getting stuck on pages without 3D models
+    const timer = setTimeout(() => {
+      setForceComplete(true);
+    }, 2500); // Max 2.5s wait
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
     // Smoothen the progress display
+    // Force target to 100 if we reach timeout
+    const targetProgress = forceComplete ? 100 : progress;
+
     gsap.to({ val: percent }, {
-      val: progress,
-      duration: 0.5,
+      val: targetProgress,
+      duration: 1.2,
+      ease: "power2.out",
       onUpdate: function() {
         setPercent(Math.floor(this.targets()[0].val));
       }
     });
 
-    if (progress >= 100 && !isReady) {
+    if ((targetProgress >= 100) && !isReady) {
       setTimeout(() => {
         setIsReady(true);
         // Exiting animation
         const tl = gsap.timeline({
           onComplete: () => {
-            setIsHidden(true);
-            if (onComplete) onComplete();
+             // Small delay after animation to ensure no flicker
+             setTimeout(() => setIsHidden(true), 100);
+             if (onComplete) onComplete();
           }
         });
 
@@ -56,7 +71,7 @@ export default function Loader({ onComplete }) {
         }, "-=0.4");
       }, 500);
     }
-  }, [progress, isReady]);
+  }, [progress, isReady, forceComplete]);
 
   if (isHidden) return null;
 
