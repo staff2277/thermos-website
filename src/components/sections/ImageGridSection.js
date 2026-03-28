@@ -24,8 +24,8 @@ const allImages = [
   { src: "/images/grid/grid-10.png", portrait: true, aspect: 0.8 },
   { src: "/images/grid/grid-11.png", portrait: true, aspect: 0.8 },
   { src: "/images/grid/grid-15.jpg", portrait: true, aspect: 0.79 },
-  { src: "/images/grid/pexels-ketut-subiyanto-5038852.jpg", portrait: false, aspect: 1.5 },
-  { src: "/images/grid/pexels-sarah-chai-7266767.jpg", portrait: false, aspect: 1.5 },
+  {src: "/images/grid/lifestyle-1.jpg", portrait: false, aspect: 1.5},
+  {src: "/images/grid/lifestyle-2.jpg", portrait: false, aspect: 1.5},
 ];
 
 function FlippableImage({ item, alt, ...props }) {
